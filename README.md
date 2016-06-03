@@ -1,4 +1,4 @@
-# ![](header.png])
+# ![](header.png)
 > Simple 1-bit tiled graphics for Love2d
 
 LoveTerm is a small library for drawing tiled greyscaled images with 
