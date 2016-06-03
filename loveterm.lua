@@ -230,6 +230,43 @@ function loveterm:setVisible(is_visible)
   self.visible = is_visible
 end
 
+function loveterm:rectangle(mode, x, y, w, h, options)
+  options = options or {}
+  local fg = options.fg or self.defaultfg
+  local bg = options.bg or self.defaultbg
+  local topLeft = options.topLeft or 218
+  local topRight = options.topRight or 191
+  local bottomLeft = options.bottomLeft or 192
+  local bottomRight = options.bottomRight or 217
+  local vertical = options.vertical or 179
+  local horizontal = options.horizontal or 196
+  local fill = options.fill or 219
+  
+  for ny = y, y + h do
+    for nx = x, x + w do
+      if mode == "line" then
+        if ny == y and nx == x then
+          self:set(topLeft, fg, bg, nx, ny)
+        elseif ny == y and nx == x + w then
+          self:set(topRight, fg, bg, nx, ny)
+        elseif ny == y + h and nx == x then
+          self:set(bottomLeft, fg, bg, nx, ny)
+        elseif ny == y + h and nx == x + w  then
+          self:set(bottomRight, fg, bg, nx, ny)
+        elseif ny == y or ny == y + h then
+          self:set(horizontal, fg, bg, nx, ny)
+        elseif nx == x or nx == x + w then
+          self:set(vertical, fg, bg, nx, ny)
+        end
+      elseif mode == "fill" then
+        self:set(fill, fg, bg, nx, ny)
+      else
+        error("Mode must be either 'line' or 'fill'", 2)
+      end
+    end
+  end
+end
+
 --- Print a plaintext string to the screen.
 --
 -- Can also take two colored text of the form
