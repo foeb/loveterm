@@ -34,10 +34,6 @@
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../index.html">loveterm</a></li>
 </ul>
-<h2>Topics</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
-  <li><a href="../topics/README.md.html">README</a></li>
-</ul>
 
 </div>
 
@@ -73,8 +69,8 @@
 <span class="comment">--- @usage
 </span><span class="keyword">local</span> usage = <span class="string">[[
 local loveterm = require "loveterm"
-local codes = require "cp437"
-local color = require "color"
+local codes = require "extra/cp437"
+local color = require "extra/color"
 
 function love.load()
   screen = loveterm.create("tilesets/CGA8x8thick.png", 80, 40)
@@ -277,6 +273,57 @@ end
   self.visible = is_visible
 <span class="keyword">end</span>
 
+<span class="comment">--- Adds a rectangle to the screen.
+</span><span class="comment">--
+</span><span class="comment">-- The <code>options</code> table has the fields <code>fg</code> and <code>bg</code> to set the colors, as
+</span><span class="comment">-- well as <code>topLeft</code>, <code>topRight</code>, <code>bottomLeft</code>, <code>bottomRight</code>,
+</span><span class="comment">-- <code>vertical</code>, and <code>horizontal</code> to set the various components of the
+</span><span class="comment">-- rectangle when mode is set to <code>line</code>. <code>options</code> also has a <code>fill</code>
+</span><span class="comment">-- field to set which character is drawn when mode is <code>fill</code>.
+</span><span class="comment">-- @function loveterm:rectangle
+</span><span class="comment">-- @param mode can either be "fill" or "line"
+</span><span class="comment">-- @int x
+</span><span class="comment">-- @int y
+</span><span class="comment">-- @int w the width of the rectangle in cells
+</span><span class="comment">-- @int h the height of the rectangle in cells
+</span><span class="comment">-- @tparam table options
+</span><span class="keyword">function</span> loveterm:rectangle(mode, x, y, w, h, options)
+  options = options <span class="keyword">or</span> {}
+  <span class="keyword">local</span> fg = options.fg <span class="keyword">or</span> self.defaultfg
+  <span class="keyword">local</span> bg = options.bg <span class="keyword">or</span> self.defaultbg
+  <span class="keyword">local</span> topLeft = options.topLeft <span class="keyword">or</span> <span class="number">218</span>
+  <span class="keyword">local</span> topRight = options.topRight <span class="keyword">or</span> <span class="number">191</span>
+  <span class="keyword">local</span> bottomLeft = options.bottomLeft <span class="keyword">or</span> <span class="number">192</span>
+  <span class="keyword">local</span> bottomRight = options.bottomRight <span class="keyword">or</span> <span class="number">217</span>
+  <span class="keyword">local</span> vertical = options.vertical <span class="keyword">or</span> <span class="number">179</span>
+  <span class="keyword">local</span> horizontal = options.horizontal <span class="keyword">or</span> <span class="number">196</span>
+  <span class="keyword">local</span> fill = options.fill <span class="keyword">or</span> <span class="number">219</span>
+
+  <span class="keyword">for</span> ny = y, y + h <span class="keyword">do</span>
+    <span class="keyword">for</span> nx = x, x + w <span class="keyword">do</span>
+      <span class="keyword">if</span> mode == <span class="string">"line"</span> <span class="keyword">then</span>
+        <span class="keyword">if</span> ny == y <span class="keyword">and</span> nx == x <span class="keyword">then</span>
+          self:set(topLeft, fg, bg, nx, ny)
+        <span class="keyword">elseif</span> ny == y <span class="keyword">and</span> nx == x + w <span class="keyword">then</span>
+          self:set(topRight, fg, bg, nx, ny)
+        <span class="keyword">elseif</span> ny == y + h <span class="keyword">and</span> nx == x <span class="keyword">then</span>
+          self:set(bottomLeft, fg, bg, nx, ny)
+        <span class="keyword">elseif</span> ny == y + h <span class="keyword">and</span> nx == x + w  <span class="keyword">then</span>
+          self:set(bottomRight, fg, bg, nx, ny)
+        <span class="keyword">elseif</span> ny == y <span class="keyword">or</span> ny == y + h <span class="keyword">then</span>
+          self:set(horizontal, fg, bg, nx, ny)
+        <span class="keyword">elseif</span> nx == x <span class="keyword">or</span> nx == x + w <span class="keyword">then</span>
+          self:set(vertical, fg, bg, nx, ny)
+        <span class="keyword">end</span>
+      <span class="keyword">elseif</span> mode == <span class="string">"fill"</span> <span class="keyword">then</span>
+        self:set(fill, fg, bg, nx, ny)
+      <span class="keyword">else</span>
+        error(<span class="string">"Mode must be either 'line' or 'fill'"</span>, <span class="number">2</span>)
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
 <span class="comment">--- Print a plaintext string to the screen.
 </span><span class="comment">--
 </span><span class="comment">-- Can also take two colored text of the form
@@ -374,7 +421,7 @@ end
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-06-03 01:03:24 </i>
+<i style="float:right;">Last updated 2016-06-03 03:22:27 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

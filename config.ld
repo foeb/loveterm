@@ -1,5 +1,4 @@
 file = "loveterm.lua"
-readme = "README.md"
 wrap = true
 no_summary = true
 format = 'markdown'

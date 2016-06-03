@@ -230,6 +230,20 @@ function loveterm:setVisible(is_visible)
   self.visible = is_visible
 end
 
+--- Adds a rectangle to the screen.
+--
+-- The `options` table has the fields `fg` and `bg` to set the colors, as
+-- well as `topLeft`, `topRight`, `bottomLeft`, `bottomRight`,
+-- `vertical`, and `horizontal` to set the various components of the
+-- rectangle when mode is set to `line`. `options` also has a `fill`
+-- field to set which character is drawn when mode is `fill`.
+-- @function loveterm:rectangle
+-- @param mode can either be "fill" or "line"
+-- @int x
+-- @int y
+-- @int w the width of the rectangle in cells
+-- @int h the height of the rectangle in cells
+-- @tparam table options
 function loveterm:rectangle(mode, x, y, w, h, options)
   options = options or {}
   local fg = options.fg or self.defaultfg
