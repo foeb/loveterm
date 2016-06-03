@@ -1,4 +1,4 @@
-# ![](header.png)
+# ![](assets/header.png)
 > Simple 1-bit tiled graphics for Love2d
 
 LoveTerm is a small library for drawing tiled greyscaled images with 
@@ -11,7 +11,7 @@ you want. However, `loveterm.print` expects the ASCII codes to match
 their respective characters in the tileset. For example, `48` is 0, `65`
 is A, etc.
 
-![](example.png)
+![](assets/example.png)
 
 ## Installation
 To use LoveTerm in your Love2d project, simply drop any of the files you

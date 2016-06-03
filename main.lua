@@ -1,6 +1,6 @@
 local loveterm = require "loveterm"
-local codes = require "cp437"
-local color = require "color"
+local codes = require "extra/cp437"
+local color = require "extra/color"
 local palette = color.c64
 
 function love.load()
@@ -20,7 +20,7 @@ function love.load()
     if k ~= "white" and k ~= "lightgray" and k ~= "gray" 
           and k ~= "darkgray" and k ~= "black" then
       screen:set(codes.smiley, v, screen.defaultbg, i*2 + 26, 22)
-      screen:set(codes['"u'], palette.black, v, i*2 + 26, 24)
+      screen:set(codes.sun, palette.black, v, i*2 + 26, 24)
       i = i + 1
     end
   end

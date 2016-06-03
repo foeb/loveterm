@@ -26,8 +26,8 @@ local loveterm = {}
 --- @usage
 local usage = [[
 local loveterm = require "loveterm"
-local codes = require "cp437"
-local color = require "color"
+local codes = require "extra/cp437"
+local color = require "extra/color"
 
 function love.load()
   screen = loveterm.create("tilesets/CGA8x8thick.png", 80, 40)
