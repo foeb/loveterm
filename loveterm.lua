@@ -390,7 +390,6 @@ function loveterm:drawImage(drawable, options, x, y, r, sx, sy, ox, oy, kx, ky)
 
   local image = self.tempCanvas:newImageData()
   for ny = 0, image:getHeight()-1 do
-    print(tostring(ny))
     for nx = 0, image:getWidth()-1 do
       local r, g, b, a = image:getPixel(nx, ny)
       a = math.floor((a or 255) * alpha/255)
@@ -399,7 +398,6 @@ function loveterm:drawImage(drawable, options, x, y, r, sx, sy, ox, oy, kx, ky)
       end
       
       if setbg then
-        print("r:" .. r)
         self:setbg({r, g, b, a}, nx, ny)
       end
     end
