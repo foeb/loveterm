@@ -5,12 +5,16 @@ local palette = color.c64
 
 function love.load()
   -- Create a new screen object
-  screen = loveterm.create("tilesets/CGA8x8thick.png", 80, 40)
+  screen = loveterm.create(
+      "tilesets/CGA8x8thick.png", 
+      math.floor(love.graphics.getWidth()/8), 
+      math.floor(love.graphics.getHeight()/8))
   
   -- Print a wrapped string to our screen at the coordinates 5, 5
   screen:print(
       screen.wrapString(
-          "LoveTerm is a small library for drawing 1-bit tiled graphics, such as terminal emulators.",
+          "LoveTerm is a small library for drawing 1-bit tiled " ..
+          "graphics, such as terminal emulators.",
           21),
       5, 5)
   -- Now let's add a pink heart next to it
@@ -20,6 +24,15 @@ function love.load()
   for i = 0, 255 do
     screen:setValue(i, (i % 16) + 32, math.floor(i / 16) + 5)
   end
+
+  -- ...or draw an image
+  local banteng = love.graphics.newImage("extra/Banteng.png")
+  screen:drawImage(
+      banteng, 
+      { alpha = 100 },
+      0, 0, 0, 
+      screen.width/banteng:getWidth(), 
+      screen.height/banteng:getHeight())
 
   -- Here we show off the included Commodore 64 color scheme
   local i = 0

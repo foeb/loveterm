@@ -86,6 +86,8 @@ function loveterm.create(tileset, width, height, fg, bg, tilesetWidth, tilesetHe
   end
   s.canvas = love.graphics.newCanvas(
       s.width * s.tileWidth, s.height * s.tileHeight)
+  -- Used for drawin images to the screen.
+  s.tempCanvas = love.graphics.newCanvas(s.width, s.height)
 
   setmetatable(s, { __index = loveterm })
   return s
@@ -145,13 +147,24 @@ function loveterm:setValue(v, x, y)
   self:makeModified()
 end
 
+local function blendColors(c1, c2)
+  local alpha = (c2[4] or 255)/255
+  local r = math.floor(c1[1] * (1 - alpha) + c2[1] * alpha)
+  local g = math.floor(c1[2] * (1 - alpha) + c2[2] * alpha)
+  local b = math.floor(c1[3] * (1 - alpha) + c2[3] * alpha)
+  local a = math.floor((c1[4] or 255) * (1 - alpha) + 255 * alpha)
+  return { r, g, b, a }
+end
+
 --- Set the foreground color at coordinates x, y to be fg.
 -- @tparam Color fg the new foreground color
 -- @int x the x coordinate of the cell to be set
 -- @int[opt=0] y the y coordinate of the cell to be set
 function loveterm:setfg(fg, x, y)
   y = y or 0
-  self.fg[x + y * self.width] = fg
+  local index = x + y * self.width
+  local oldfg = self.fg[index] or self.defaultfg
+  self.fg[index] = blendColors(oldfg, fg)
   self:makeModified()
 end
 
@@ -161,7 +174,9 @@ end
 -- @int[opt=0] y the y coordinate of the cell to be set
 function loveterm:setbg(bg, x, y)
   y = y or 0
-  self.bg[x + y * self.width] = bg
+  local index = x + y * self.width
+  local oldbg = self.bg[index] or self.defaultbg
+  self.bg[index] = blendColors(oldbg, bg)
   self:makeModified()
 end
 
@@ -331,6 +346,62 @@ function loveterm:line(x1, y1, x2, y2, fg, bg, v)
       y1 = y1 + iy
 
       self:set(v, fg, bg, x1, y1)
+    end
+  end
+end
+
+--- Draw an image to the screen.
+--
+-- The options table can include `setfg` (default: false), `setbg` (default: true),
+-- `filter` (default: "linear", other possible setting is "nearest"), or `alpha`
+-- (default: 255), which is the alpha to draw the image with.
+-- @tparam Drawable drawable a love2d drawable object, such as an image or canvas
+-- @tparam[opt={}] table options the options table
+-- @int[opt=0] x the x coordinate of the screen to start drawing on
+-- @int[opt=0] y the y coordinate of the screen to start drawing on
+-- @int[opt=0] r orientation in radians
+-- @int[opt=1] sx scale-factor (x-axis)
+-- @int[opt=sx] sy scale-factor (y-axis)
+-- @int[opt=0] ox origin offset (x-axis)
+-- @int[opt=0] oy origin offset (y-axis)
+-- @int[opt=0] kx shearing factor (x-axis)
+-- @int[opt=0] ky shearing factor (y-axis)
+function loveterm:drawImage(drawable, options, x, y, r, sx, sy, ox, oy, kx, ky)
+  x = x or 0
+  y = y or 0
+  r = r or 0
+  sx = sx or 1
+  sy = sy or sx
+  ox = ox or 0
+  oy = oy or 0
+  kx = kx or 0
+  ky = ky or 0
+  options = options or {}
+  setfg = options.setfg or false
+  setbg = options.setbg or true
+  filter = options.filter or "linear"
+  alpha = options.alpha or 255
+
+  self.tempCanvas:setFilter(filter, filter)
+  love.graphics.setCanvas(self.tempCanvas)
+  love.graphics.clear()
+  love.graphics.draw(drawable, x, y, r, sx, sy, ox, oy)
+  love.graphics.setCanvas()
+
+  local image = self.tempCanvas:newImageData()
+  for ny = 0, image:getHeight()-1 do
+    print(tostring(ny))
+    for nx = 0, image:getWidth()-1 do
+      local r, g, b, a = image:getPixel(nx, ny)
+      a = math.floor((a or 255) * alpha/255)
+      if setfg then
+        self:setfg({r, g, b, a}, nx, ny)
+      end
+      
+      if setbg then
+        print("r:" .. r)
+        self:setbg({r, g, b, a}, nx, ny)
+      end
     end
   end
 end
