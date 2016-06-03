@@ -13,6 +13,9 @@ is A, etc.
 
 ![](assets/example.png)
 
+Contributions of more public domain tilesets or color palettes are very
+welcome!
+
 ## Installation
 To use LoveTerm in your Love2d project, simply drop any of the files you
 need into its directory and include it by adding 
