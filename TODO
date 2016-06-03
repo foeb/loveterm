@@ -1,0 +1,6 @@
+TODO
+
+ - Use a canvas in order to draw an image on the console, using the bg
+as pixels. (a canvas allows us to rotate and scale the image, as well as
+apply other effects to it)
+ - Get loveterm.wrapString to be able to use two colored text

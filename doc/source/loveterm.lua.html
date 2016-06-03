@@ -1,0 +1,381 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+
+
+
+</ul>
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../index.html">loveterm</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../topics/README.md.html">README</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+    <h2>loveterm.lua</h2>
+<pre>
+<span class="comment">--
+</span><span class="comment">-- LoveTerm - simple 1-bit tiled graphics for Love2d
+</span><span class="comment">--
+</span><span class="comment">-- Written in 2016 by Mina Phoebe Bell minaphoebebell@gmail.com
+</span><span class="comment">--
+</span><span class="comment">-- To the extent possible under law, the author(s) have dedicated all copyright
+</span><span class="comment">-- and related and neighboring rights to this software to the public domain
+</span><span class="comment">-- worldwide. This software is distributed without any warranty.
+</span><span class="comment">--
+</span><span class="comment">-- You should have received a copy of the CC0 Public Domain Dedication along
+</span><span class="comment">-- with this software. If not, see
+</span><span class="comment">--      &lt;http://creativecommons.org/publicdomain/zero/1.0/&gt;.
+</span><span class="comment">--
+</span>
+<span class="comment">-- @tfield[opt=0] int currentLine the line to start drawing
+</span><span class="comment">-- @tfield[opt=true] bool visible set to false to hide the canvas
+</span>
+
+<span class="comment">--- LoveTerm - simple 1-bit tiled graphics for Love2d
+</span><span class="comment">-- @module loveterm
+</span><span class="comment">-- @author Mina Phoebe Bell
+</span><span class="comment">-- @license CC0
+</span>
+<span class="keyword">local</span> loveterm = {}
+
+<span class="comment">--- @usage
+</span><span class="keyword">local</span> usage = <span class="string">[[
+local loveterm = require "loveterm"
+local codes = require "cp437"
+local color = require "color"
+
+function love.load()
+  screen = loveterm.create("tilesets/CGA8x8thick.png", 80, 40)
+  screen:print(
+      screen.wrapString(
+          "LoveTerm is a small library for drawing 1-bit " ..
+          "tiled graphics, such as terminal emulators.",
+          21),
+      5, 5)
+  screen:set(codes.heart, color.c64.pink, screen.defaultbg, 3, 5)
+end
+
+function love.draw()
+  screen:draw()
+end
+]]</span>
+
+<span class="comment">--- Create and initialize a new loveterm object.
+</span><span class="comment">-- @function create
+</span><span class="comment">-- @string tileset a string of the location of the tileset image
+</span><span class="comment">-- @int width the maximum number of tiles displayed on the x-axis
+</span><span class="comment">-- @int height the maximum number of tiles displayed on the y-axis
+</span><span class="comment">-- @tparam Color fg the default foreground color
+</span><span class="comment">-- @tparam Color bg the default background color
+</span><span class="comment">-- @int[opt=16] tilesetWidth the width of the tileset image in tiles
+</span><span class="comment">-- @int[opt=16] tilesetHeight the height of the tileset image in tiles
+</span><span class="comment">-- @return a new loveterm object
+</span><span class="keyword">function</span> loveterm.create(tileset, width, height, fg, bg, tilesetWidth, tilesetHeight)
+  <span class="keyword">local</span> s = {}
+  s.width = width
+  s.height = height
+  s.defaultfg = fg <span class="keyword">or</span> { <span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span> }
+  s.defaultbg = bg <span class="keyword">or</span> { <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span> }
+  s.values = {}
+  s.fg = {}
+  s.bg = {}
+  s.currentLine = <span class="number">0</span>
+
+  s.visible = <span class="keyword">true</span>
+  s.modifiedDraw = <span class="keyword">false</span>
+
+  s.tileset = love.graphics.newImage(tileset)
+  s.tilesetWidth = tilesetWidth <span class="keyword">or</span> <span class="number">16</span>
+  s.tilesetHeight  = tilesetHeight <span class="keyword">or</span> <span class="number">16</span>
+  s.tileWidth = s.tileset:getWidth()/s.tilesetWidth
+  s.tileHeight = s.tileset:getHeight()/s.tilesetHeight<a id="58"></a>
+  s.tilesetQuads = {}
+  <span class="keyword">for</span> i = <span class="number">0</span>, <span class="number">255</span> <span class="keyword">do</span>
+    s.tilesetQuads[i] = love.graphics.newQuad(
+        (i%<span class="number">16</span>) * s.tileWidth,
+        <span class="global">math</span>.floor(i/<span class="number">16</span>) * s.tileHeight,
+        s.tileWidth,
+        s.tileHeight,
+        s.tileset:getWidth(),
+        s.tileset:getHeight())
+  <span class="keyword">end</span>
+  s.canvas = love.graphics.newCanvas(
+      s.width * s.tileWidth, s.height * s.tileHeight)
+
+  <span class="global">setmetatable</span>(s, { __index = loveterm })
+  <span class="keyword">return</span> s
+<span class="keyword">end</span>
+
+<span class="comment">--- Draw the canvas at x, y.
+</span><span class="comment">-- @int[opt=0] x the x coordinate in pixels
+</span><span class="comment">-- @int[opt=0] y the y coordinate in pixels
+</span><span class="comment">-- @bool[opt=false] force flush the loveterm object no matter what
+</span><span class="keyword">function</span> loveterm:draw(x, y, force)
+  <span class="keyword">if</span> self.modifiedDraw <span class="keyword">or</span> force <span class="keyword">then</span>
+    self:flush()
+  <span class="keyword">end</span>
+
+  <span class="keyword">if</span> self.visible <span class="keyword">then</span>
+    x = x <span class="keyword">or</span> <span class="number">0</span>
+    y = y <span class="keyword">or</span> <span class="number">0</span>
+    love.graphics.draw(self.canvas, x, y)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">--- Render to the canvas.
+</span><span class="keyword">function</span> loveterm:flush()
+  self.modifiedDraw = <span class="keyword">false</span>
+  love.graphics.setCanvas(self.canvas)
+  <span class="keyword">local</span> start = self.currentLine * self.width
+  <span class="keyword">for</span> i = start, self.width * self.height - <span class="number">1</span> + start <span class="keyword">do</span>
+    love.graphics.setColor(self.bg[i] <span class="keyword">or</span> self.defaultbg)<a id="98"></a>
+    love.graphics.rectangle(
+        <span class="string">"fill"</span>,
+        (i % self.width) * self.tileWidth,
+        <span class="global">math</span>.floor((i - start) / self.width) * self.tileHeight,
+        self.tileWidth,
+        self.tileHeight)
+    love.graphics.setColor(self.fg[i] <span class="keyword">or</span> self.defaultfg)
+    love.graphics.draw(
+        self.tileset,
+        self.tilesetQuads[self.values[i] <span class="keyword">or</span> <span class="number">0</span>],
+        (i % self.width) * self.tileWidth,
+        <span class="global">math</span>.floor((i - start) / self.width) * self.tileHeight)
+  <span class="keyword">end</span><a id="111"></a>
+  love.graphics.setColor(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>)
+  love.graphics.setCanvas()
+<span class="keyword">end</span>
+
+<span class="comment">--- Set the character at coordinates x, y to be v.
+</span><span class="comment">-- @int v the tile number
+</span><span class="comment">-- @int x the x coordinate of the cell to be set
+</span><span class="comment">-- @int[opt=0] y the y coordinate of the cell to be set
+</span><span class="comment">-- @usage screen:setValue(1, 5, 2)
+</span><span class="comment">-- @usage for i = 0, screen.width * screen.height - 1 do
+</span><span class="comment">-- @usage   screen:setValue(1, i)
+</span><span class="comment">-- @usage end
+</span><span class="keyword">function</span> loveterm:setValue(v, x, y)
+  y = y <span class="keyword">or</span> <span class="number">0</span>
+  self.values[x + y * self.width] = v
+  self:makeModified()
+<span class="keyword">end</span>
+
+<span class="comment">--- Set the foreground color at coordinates x, y to be fg.
+</span><span class="comment">-- @tparam Color fg the new foreground color
+</span><span class="comment">-- @int x the x coordinate of the cell to be set
+</span><span class="comment">-- @int[opt=0] y the y coordinate of the cell to be set
+</span><span class="keyword">function</span> loveterm:setfg(fg, x, y)
+  y = y <span class="keyword">or</span> <span class="number">0</span>
+  self.fg[x + y * self.width] = fg
+  self:makeModified()
+<span class="keyword">end</span>
+
+<span class="comment">--- Set the background color at coordinates x, y to be bg.
+</span><span class="comment">-- @tparam Color bg the new background color
+</span><a id="142"></a><span class="comment">-- @int[opt=0] x the x coordinate of the cell to be set
+</span><span class="comment">-- @int[opt=0] y the y coordinate of the cell to be set
+</span><span class="keyword">function</span> loveterm:setbg(bg, x, y)
+  y = y <span class="keyword">or</span> <span class="number">0</span>
+  self.bg[x + y * self.width] = bg
+  self:makeModified()
+<span class="keyword">end</span>
+
+<span class="comment">--- Set the foreground and background colors at coordinates x, y to be fg, bg.
+</span><span class="comment">-- @tparam Color fg the new foreground color
+</span><a id="152"></a><span class="comment">-- @tparam Color bg the new background color
+</span><span class="comment">-- @int[opt=0] x the x coordinate of the cell to be set
+</span><span class="comment">-- @int[opt=0] y the y coordinate of the cell to be set
+</span><span class="keyword">function</span> loveterm:setColor(fg, bg, x, y)
+  y = y <span class="keyword">or</span> <span class="number">0</span>
+  self:setfg(fg, x, y)
+  self:setbg(bg, x, y)
+  self:makeModified()
+<span class="keyword">end</span>
+
+<a id="162"></a><span class="comment">--- Set the character, foreground and background colors at coordinates x, y to be v, fg and bg.
+</span><span class="comment">-- @int v the tile number
+</span><span class="comment">-- @tparam Color fg the new foreground color
+</span><span class="comment">-- @tparam Color bg the new background color
+</span><span class="comment">-- @int[opt=0] x the x coordinate of the cell to be set
+</span><span class="comment">-- @int[opt=0] y the y coordinate of the cell to be set
+</span><span class="keyword">function</span> loveterm:set(v, fg, bg, x, y)
+  y = y <span class="keyword">or</span> <span class="number">0</span>
+  self:setValue(v, x, y)
+  self:setfg(fg, x, y)
+  self:setbg(bg, x, y)
+  self:makeModified()<a id="173"></a>
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> loveterm:makeModified()
+  self.modifiedDraw = <span class="keyword">true</span>
+<span class="keyword">end</span>
+
+<span class="comment">--- Empty the screen back to the default background color.
+</span><span class="keyword">function</span> loveterm:clear()
+  <span class="keyword">for</span> i = <span class="number">0</span>, self.width * self.height - <span class="number">1</span> <span class="keyword">do</span>
+    self:set(<span class="number">0</span>, self.defaultfg, self.defaultbg, i + self.currentLine * self.height)
+  <span class="keyword">end</span>
+<span class="keyword">end</span><a id="186"></a>
+
+<span class="comment">--- Get the number of the line at the top of the screen.
+</span><span class="comment">-- @treturn int the current line
+</span><span class="keyword">function</span> loveterm:getCurrentLine()
+  <span class="keyword">return</span> self.currentLine
+<span class="keyword">end</span>
+
+<span class="comment">--- Set the current line number. This is useful for scrolling.
+</span><span class="comment">-- @int lineNumber the new line number
+</span><span class="keyword">function</span> loveterm:setCurrentLine(lineNumber)
+  self.currentLine = lineNumber
+  self:makeModified()
+<span class="keyword">end</span><a id="199"></a>
+
+<span class="comment">--- Check if it is visible.
+</span><span class="comment">-- @treturn bool
+</span><span class="keyword">function</span> loveterm:is_visible()
+  <span class="keyword">return</span> self.visible
+<span class="keyword">end</span>
+
+<span class="comment">--- Set whether or not it is visible.
+</span><a id="207"></a><span class="comment">--
+</span><span class="comment">-- Not visible objects aren't drawn when called with <a href="../index.html#draw">draw</a>.
+</span><span class="comment">-- @bool[opt=true] is_visible use false to hide it
+</span><span class="keyword">function</span> loveterm:setVisible(is_visible)
+  is_visible = is_visible <span class="keyword">or</span> <span class="keyword">true</span>
+  self.visible = is_visible
+<span class="keyword">end</span>
+
+<span class="comment">--- Print a plaintext string to the screen.
+</span><span class="comment">--
+</span><span class="comment">-- Can also take two colored text of the form
+</span><span class="comment">-- { fgcolor1, bgcolor1, string1, fgcolor2, ... }
+</span><span class="comment">-- @param s the string or two colored text to be printed
+</span><span class="comment">-- @int[opt=0] x
+</span><span class="comment">-- @int[opt=0] y
+</span><span class="keyword">function</span> loveterm:<span class="global">print</span>(s, x, y)
+  <span class="keyword">if</span> <span class="global">type</span>(s) == <span class="string">"string"</span> <span class="keyword">then</span>
+    s = { self.defaultfg, self.defaultbg, s }
+  <span class="keyword">end</span>
+  x = x <span class="keyword">or</span> <span class="number">0</span>
+  y = y <span class="keyword">or</span> <span class="number">0</span>
+  <span class="keyword">local</span> offset = <span class="number">0</span>
+  <span class="keyword">for</span> i = <span class="number">1</span>, #s, <span class="number">3</span> <span class="keyword">do</span>
+    <span class="keyword">local</span> bytes = { s[i+<span class="number">2</span>]:byte(<span class="number">1</span>, -<span class="number">1</span>) }
+    <span class="keyword">for</span> _,v <span class="keyword">in</span> <span class="global">ipairs</span>(bytes) <span class="keyword">do</span>
+      <span class="keyword">if</span> v == <span class="number">10</span> <span class="keyword">then</span> <span class="comment">-- 10 is a newline character ('\n')
+</span>        y = y + <span class="number">1</span>
+        offset = <span class="number">0</span>
+      <span class="keyword">else</span>
+        self:set(v, s[i], s[i+<span class="number">1</span>], x + offset, y)
+        offset = offset + <span class="number">1</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">--- Wrap a string according to a certain width.
+</span><span class="comment">-- @string s
+</span><span class="comment">-- @int width the maximum line width
+</span><span class="comment">-- @treturn string the string with added newlines
+</span><span class="keyword">function</span> loveterm.wrapString(s, width)
+  <span class="global">assert</span>(<span class="global">type</span>(s) == <span class="string">"string"</span>, <span class="string">"The first argument of wrapString needs to be a string. Did you accidentally call it using a colon?"</span>)
+  <span class="keyword">local</span> <span class="keyword">function</span> iter()
+    <span class="keyword">local</span> iter_i = <span class="number">1</span>
+    <span class="keyword">return</span> <span class="keyword">function</span>()
+      <span class="keyword">local</span> result = <span class="keyword">nil</span>
+      <span class="keyword">if</span> iter_i &gt; s:len() <span class="keyword">then</span>
+        <span class="keyword">return</span>
+      <span class="keyword">elseif</span> s:match(<span class="string">"^%w+%-"</span>, iter_i) <span class="keyword">then</span>
+        result = s:match(<span class="string">"^%w+%-"</span>, iter_i)
+      <span class="keyword">elseif</span> s:match(<span class="string">"^%w+%,"</span>, iter_i) <span class="keyword">then</span>
+        result = s:match(<span class="string">"^%w+%,"</span>, iter_i)
+      <span class="keyword">elseif</span> s:match(<span class="string">"^%w+%."</span>, iter_i) <span class="keyword">then</span>
+        result = s:match(<span class="string">"^%w+%."</span>, iter_i)
+      <span class="keyword">elseif</span> s:match(<span class="string">"^%w+"</span>, iter_i) <span class="keyword">then</span>
+        result = s:match(<span class="string">"^%w+"</span>, iter_i)
+      <span class="keyword">elseif</span> s:match(<span class="string">"^% +"</span>, iter_i) <span class="keyword">then</span>
+        result = s:match(<span class="string">"^% +"</span>, iter_i)
+      <span class="keyword">else</span>
+        result = s:sub(iter_i, iter_i)
+      <span class="keyword">end</span>
+      iter_i = iter_i + result:len()
+      <span class="keyword">return</span> result
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">local</span> spaceLeft = width
+  <span class="keyword">local</span> acc = <span class="string">""</span>
+  <span class="keyword">for</span> token <span class="keyword">in</span> iter() <span class="keyword">do</span>
+    <span class="keyword">if</span> token == <span class="string">'\n'</span> <span class="keyword">then</span>
+      spaceLeft = width + <span class="number">1</span>
+    <span class="keyword">elseif</span> spaceLeft - token:len() &lt; <span class="number">0</span> <span class="keyword">then</span>
+      <span class="keyword">if</span> spaceLeft &lt; width <span class="keyword">then</span>
+        acc = acc .. <span class="string">'\n'</span>
+        spaceLeft = width
+      <span class="keyword">end</span>
+
+      <span class="keyword">while</span> token:len() &gt; width <span class="keyword">do</span>
+        acc = acc .. token:sub(<span class="number">1</span>, width) .. <span class="string">'\n'</span>
+        token = token:sub(width + <span class="number">1</span>)
+      <span class="keyword">end</span>
+
+      <span class="comment">-- strip leading whitespace from the token
+</span>      <span class="keyword">local</span> i = token:find(<span class="string">"[^%s]"</span>)
+      <span class="keyword">if</span> i <span class="keyword">then</span>
+        token = token:sub(i)
+      <span class="keyword">else</span>
+        token = <span class="string">""</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    acc = acc .. token
+    spaceLeft = spaceLeft - token:len()
+  <span class="keyword">end</span>
+
+  <span class="keyword">return</span> acc
+<span class="keyword">end</span>
+
+<span class="keyword">return</span> loveterm</pre>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-06-03 01:03:24 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

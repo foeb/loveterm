@@ -1,0 +1,551 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+
+
+
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><strong>loveterm</strong></li>
+</ul>
+<h2>Topics</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="topics/README.md.html">README</a></li>
+</ul>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>loveterm</code></h1>
+<p>LoveTerm - simple 1-bit tiled graphics for Love2d</p>
+<p>
+
+</p>
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">local loveterm = require &quot;loveterm&quot;
+local codes = require &quot;cp437&quot;
+local color = require &quot;color&quot;
+
+function love.load()
+  screen = loveterm.create(&quot;tilesets/CGA8x8thick.png&quot;, 80, 40)
+  screen:print(
+      screen.wrapString(
+          &quot;LoveTerm is a small library for drawing 1-bit &quot; ..
+          &quot;tiled graphics, such as terminal emulators.&quot;,
+          21),
+      5, 5)
+  screen:set(codes.heart, color.c64.pink, screen.defaultbg, 3, 5)
+end
+
+function love.draw()
+  screen:draw()
+end
+</pre>
+    </ul>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>License</strong>: CC0</li>
+        <li><strong>Author</strong>: Mina Phoebe Bell</li>
+    </ul>
+
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "create"></a>
+    <strong>create (tileset, width, height, fg, bg[, tilesetWidth=16[, tilesetHeight=16]])</strong>
+    <a style="float:right;" href="source/loveterm.lua.html#58">line 58</a>
+    </dt>
+    <dd>
+    Create and initialize a new loveterm object.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tileset</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         a string of the location of the tileset image
+        </li>
+        <li><span class="parameter">width</span>
+            <span class="types"><span class="type">int</span></span>
+         the maximum number of tiles displayed on the x-axis
+        </li>
+        <li><span class="parameter">height</span>
+            <span class="types"><span class="type">int</span></span>
+         the maximum number of tiles displayed on the y-axis
+        </li>
+        <li><span class="parameter">fg</span>
+            <span class="types"><span class="type">Color</span></span>
+         the default foreground color
+        </li>
+        <li><span class="parameter">bg</span>
+            <span class="types"><span class="type">Color</span></span>
+         the default background color
+        </li>
+        <li><span class="parameter">tilesetWidth</span>
+            <span class="types"><span class="type">int</span></span>
+         the width of the tileset image in tiles
+         (<em>default</em> 16)
+        </li>
+        <li><span class="parameter">tilesetHeight</span>
+            <span class="types"><span class="type">int</span></span>
+         the height of the tileset image in tiles
+         (<em>default</em> 16)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        a new loveterm object
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "draw"></a>
+    <strong>draw ([x=0[, y=0[, force=false]]])</strong>
+    <a style="float:right;" href="source/loveterm.lua.html#98">line 98</a>
+    </dt>
+    <dd>
+    Draw the canvas at x, y.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">int</span></span>
+         the x coordinate in pixels
+         (<em>default</em> 0)
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">int</span></span>
+         the y coordinate in pixels
+         (<em>default</em> 0)
+        </li>
+        <li><span class="parameter">force</span>
+            <span class="types"><span class="type">bool</span></span>
+         flush the loveterm object no matter what
+         (<em>default</em> false)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "flush"></a>
+    <strong>flush ()</strong>
+    <a style="float:right;" href="source/loveterm.lua.html#111">line 111</a>
+    </dt>
+    <dd>
+    Render to the canvas.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "setValue"></a>
+    <strong>setValue (v, x[, y=0])</strong>
+    <a style="float:right;" href="source/loveterm.lua.html#142">line 142</a>
+    </dt>
+    <dd>
+    Set the character at coordinates x, y to be v.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">v</span>
+            <span class="types"><span class="type">int</span></span>
+         the tile number
+        </li>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">int</span></span>
+         the x coordinate of the cell to be set
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">int</span></span>
+         the y coordinate of the cell to be set
+         (<em>default</em> 0)
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">screen:setValue(<span class="number">1</span>, <span class="number">5</span>, <span class="number">2</span>)</pre></li>
+        <li><pre class="example"><span class="keyword">for</span> i = <span class="number">0</span>, screen.width * screen.height - <span class="number">1</span> <span class="keyword">do</span></pre></li>
+        <li><pre class="example">screen:setValue(<span class="number">1</span>, i)</pre></li>
+        <li><pre class="example"><span class="keyword">end</span></pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "setfg"></a>
+    <strong>setfg (fg, x[, y=0])</strong>
+    <a style="float:right;" href="source/loveterm.lua.html#152">line 152</a>
+    </dt>
+    <dd>
+    Set the foreground color at coordinates x, y to be fg.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">fg</span>
+            <span class="types"><span class="type">Color</span></span>
+         the new foreground color
+        </li>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">int</span></span>
+         the x coordinate of the cell to be set
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">int</span></span>
+         the y coordinate of the cell to be set
+         (<em>default</em> 0)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "setbg"></a>
+    <strong>setbg (bg[, x=0[, y=0]])</strong>
+    <a style="float:right;" href="source/loveterm.lua.html#162">line 162</a>
+    </dt>
+    <dd>
+    Set the background color at coordinates x, y to be bg.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">bg</span>
+            <span class="types"><span class="type">Color</span></span>
+         the new background color
+        </li>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">int</span></span>
+         the x coordinate of the cell to be set
+         (<em>default</em> 0)
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">int</span></span>
+         the y coordinate of the cell to be set
+         (<em>default</em> 0)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "setColor"></a>
+    <strong>setColor (fg, bg[, x=0[, y=0]])</strong>
+    <a style="float:right;" href="source/loveterm.lua.html#173">line 173</a>
+    </dt>
+    <dd>
+    Set the foreground and background colors at coordinates x, y to be fg, bg.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">fg</span>
+            <span class="types"><span class="type">Color</span></span>
+         the new foreground color
+        </li>
+        <li><span class="parameter">bg</span>
+            <span class="types"><span class="type">Color</span></span>
+         the new background color
+        </li>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">int</span></span>
+         the x coordinate of the cell to be set
+         (<em>default</em> 0)
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">int</span></span>
+         the y coordinate of the cell to be set
+         (<em>default</em> 0)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "set"></a>
+    <strong>set (v, fg, bg[, x=0[, y=0]])</strong>
+    <a style="float:right;" href="source/loveterm.lua.html#186">line 186</a>
+    </dt>
+    <dd>
+    Set the character, foreground and background colors at coordinates x, y to be v, fg and bg.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">v</span>
+            <span class="types"><span class="type">int</span></span>
+         the tile number
+        </li>
+        <li><span class="parameter">fg</span>
+            <span class="types"><span class="type">Color</span></span>
+         the new foreground color
+        </li>
+        <li><span class="parameter">bg</span>
+            <span class="types"><span class="type">Color</span></span>
+         the new background color
+        </li>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">int</span></span>
+         the x coordinate of the cell to be set
+         (<em>default</em> 0)
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">int</span></span>
+         the y coordinate of the cell to be set
+         (<em>default</em> 0)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "clear"></a>
+    <strong>clear ()</strong>
+    <a style="float:right;" href="source/loveterm.lua.html#199">line 199</a>
+    </dt>
+    <dd>
+    Empty the screen back to the default background color.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getCurrentLine"></a>
+    <strong>getCurrentLine ()</strong>
+    <a style="float:right;" href="source/loveterm.lua.html#207">line 207</a>
+    </dt>
+    <dd>
+    Get the number of the line at the top of the screen.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        the current line
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "setCurrentLine"></a>
+    <strong>setCurrentLine (lineNumber)</strong>
+    <a style="float:right;" href="source/loveterm.lua.html#213">line 213</a>
+    </dt>
+    <dd>
+    Set the current line number.  This is useful for scrolling.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">lineNumber</span>
+            <span class="types"><span class="type">int</span></span>
+         the new line number
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "is_visible"></a>
+    <strong>is_visible ()</strong>
+    <a style="float:right;" href="source/loveterm.lua.html#220">line 220</a>
+    </dt>
+    <dd>
+    Check if it is visible.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "setVisible"></a>
+    <strong>setVisible ([is_visible=true])</strong>
+    <a style="float:right;" href="source/loveterm.lua.html#228">line 228</a>
+    </dt>
+    <dd>
+    Set whether or not it is visible. </p>
+
+<p> Not visible objects aren't drawn when called with <a href="index.html#draw">draw</a>.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">is_visible</span>
+            <span class="types"><span class="type">bool</span></span>
+         use false to hide it
+         (<em>default</em> true)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "print"></a>
+    <strong>print (s[, x=0[, y=0]])</strong>
+    <a style="float:right;" href="source/loveterm.lua.html#240">line 240</a>
+    </dt>
+    <dd>
+    Print a plaintext string to the screen. </p>
+
+<p> Can also take two colored text of the form
+ { fgcolor1, bgcolor1, string1, fgcolor2, ... }
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">s</span>
+         the string or two colored text to be printed
+        </li>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+         (<em>default</em> 0)
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+         (<em>default</em> 0)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "wrapString"></a>
+    <strong>wrapString (s, width)</strong>
+    <a style="float:right;" href="source/loveterm.lua.html#265">line 265</a>
+    </dt>
+    <dd>
+    Wrap a string according to a certain width.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">s</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">width</span>
+            <span class="types"><span class="type">int</span></span>
+         the maximum line width
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        the string with added newlines
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-06-03 01:03:24 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
