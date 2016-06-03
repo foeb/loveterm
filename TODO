@@ -4,3 +4,4 @@ TODO
 as pixels. (a canvas allows us to rotate and scale the image, as well as
 apply other effects to it)
  - Get loveterm.wrapString to be able to use two colored text
+ - Create some box and line drawing functions
