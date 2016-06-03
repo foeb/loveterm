@@ -367,8 +367,9 @@ end
 -- @string s
 -- @int width the maximum line width
 -- @treturn string the string with added newlines
-function loveterm.wrapString(s, width)
+function loveterm.wrapString(s, width, align)
   assert(type(s) == "string", "The first argument of wrapString needs to be a string. Did you accidentally call it using a colon?")
+  align = align or "left"
   local function iter()
     local iter_i = 1
     return function()
@@ -391,6 +392,32 @@ function loveterm.wrapString(s, width)
       iter_i = iter_i + result:len()
       return result
     end
+  end
+
+  local function flushRight(text, width)
+    local acc = ""
+    local function iter()
+      local iter_i = 1
+      return function()
+        if iter_i <= text:len() then
+          local newlines = text:match("^\n+", iter_i)
+          if newlines then
+            acc = acc .. newlines
+            iter_i = iter_i + newlines:len()
+          end
+          local result = text:match("^[^\n]+", iter_i)
+          iter_i = iter_i + result:len()
+          return result
+        end
+      end
+    end
+    for line in iter() do
+      for i = 1, width - line:len() do
+        acc = acc .. " "
+      end
+      acc = acc .. line
+    end
+    return acc
   end
 
   local spaceLeft = width
@@ -422,6 +449,9 @@ function loveterm.wrapString(s, width)
     spaceLeft = spaceLeft - token:len()
   end
 
+  if align == "right" then
+    return flushRight(acc, width)
+  end
   return acc
 end
 
