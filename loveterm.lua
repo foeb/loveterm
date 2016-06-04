@@ -310,14 +310,16 @@ function loveterm:line(x1, y1, x2, y2, fg, bg, v)
   bg = bg or self.defaultbg
   v = v or 219
 
-  local function plotfn(_, x, y)
-    self:set(v, fg, bg, x, y)
+  local function plotfn(screen, x, y)
+    loveterm.set(screen, v, fg, bg, x, y)
   end
 
   loveterm.bresenham(nil, plotfn, x1, y1, x2, y2)
 end
 
 --- Plots a line from (x1, y1) to (x2, y2) on map using a function
+--
+-- See the source code of @{line} for an example of use.
 -- @param map passed as the first argument to `plotfn`
 -- @tparam function(map,x,y) plotfn called every time a point is plotted
 -- @int x1
