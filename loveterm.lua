@@ -139,8 +139,8 @@ end
 -- @int[opt=0] y the y coordinate of the cell to be set
 -- @usage screen:setValue(1, 5, 2)
 -- @usage for i = 0, screen.width * screen.height - 1 do
--- @usage   screen:setValue(1, i)
--- @usage end
+--   screen:setValue(1, i)
+-- end
 function loveterm:setValue(v, x, y)
   y = y or 0
   self.values[x + y * self.width] = v
@@ -499,6 +499,7 @@ end
 --- Wrap a string according to a certain width.
 -- @string s
 -- @int width the maximum line width
+-- @string[opt="left"] align the alignment of the text. Can be `"left"`, `"right"`, or `"center"`.
 -- @treturn string the string with added newlines
 function loveterm.wrapString(s, width, align)
   assert(type(s) == "string", "The first argument of wrapString needs to " ..

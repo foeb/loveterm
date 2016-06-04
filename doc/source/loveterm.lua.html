@@ -129,6 +129,8 @@ end
   <span class="keyword">end</span>
   s.canvas = love.graphics.newCanvas(
       s.width * s.tileWidth, s.height * s.tileHeight)
+  <span class="comment">-- Used for drawin images to the screen.
+</span>  s.tempCanvas = love.graphics.newCanvas(s.width, s.height)
 
   <span class="global">setmetatable</span>(s, { __index = loveterm })
   <span class="keyword">return</span> s
@@ -156,7 +158,7 @@ end
   love.graphics.setCanvas(self.canvas)
   <span class="keyword">local</span> start = self.currentLine * self.width
   <span class="keyword">for</span> i = start, self.width * self.height - <span class="number">1</span> + start <span class="keyword">do</span>
-    love.graphics.setColor(self.bg[i] <span class="keyword">or</span> self.defaultbg)<a id="98"></a>
+    love.graphics.setColor(self.bg[i] <span class="keyword">or</span> self.defaultbg)<a id="100"></a>
     love.graphics.rectangle(
         <span class="string">"fill"</span>,
         (i % self.width) * self.tileWidth,
@@ -169,7 +171,7 @@ end
         self.tilesetQuads[self.values[i] <span class="keyword">or</span> <span class="number">0</span>],
         (i % self.width) * self.tileWidth,
         <span class="global">math</span>.floor((i - start) / self.width) * self.tileHeight)
-  <span class="keyword">end</span><a id="111"></a>
+  <span class="keyword">end</span><a id="113"></a>
   love.graphics.setColor(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>)
   love.graphics.setCanvas()
 <span class="keyword">end</span>
@@ -180,37 +182,50 @@ end
 </span><span class="comment">-- @int[opt=0] y the y coordinate of the cell to be set
 </span><span class="comment">-- @usage screen:setValue(1, 5, 2)
 </span><span class="comment">-- @usage for i = 0, screen.width * screen.height - 1 do
-</span><span class="comment">-- @usage   screen:setValue(1, i)
-</span><span class="comment">-- @usage end
+</span><span class="comment">--   screen:setValue(1, i)
+</span><span class="comment">-- end
 </span><span class="keyword">function</span> loveterm:setValue(v, x, y)
   y = y <span class="keyword">or</span> <span class="number">0</span>
   self.values[x + y * self.width] = v
   self:makeModified()
 <span class="keyword">end</span>
 
+<span class="keyword">local</span> <span class="keyword">function</span> blendColors(c1, c2)
+  <span class="keyword">local</span> alpha = (c2[<span class="number">4</span>] <span class="keyword">or</span> <span class="number">255</span>)/<span class="number">255</span>
+  <span class="keyword">local</span> r = <span class="global">math</span>.floor(c1[<span class="number">1</span>] * (<span class="number">1</span> - alpha) + c2[<span class="number">1</span>] * alpha)
+  <span class="keyword">local</span> g = <span class="global">math</span>.floor(c1[<span class="number">2</span>] * (<span class="number">1</span> - alpha) + c2[<span class="number">2</span>] * alpha)
+  <span class="keyword">local</span> b = <span class="global">math</span>.floor(c1[<span class="number">3</span>] * (<span class="number">1</span> - alpha) + c2[<span class="number">3</span>] * alpha)
+  <span class="keyword">local</span> a = <span class="global">math</span>.floor((c1[<span class="number">4</span>] <span class="keyword">or</span> <span class="number">255</span>) * (<span class="number">1</span> - alpha) + <span class="number">255</span> * alpha)
+  <span class="keyword">return</span> { r, g, b, a }
+<span class="keyword">end</span>
+
 <span class="comment">--- Set the foreground color at coordinates x, y to be fg.
 </span><span class="comment">-- @tparam Color fg the new foreground color
 </span><span class="comment">-- @int x the x coordinate of the cell to be set
-</span><span class="comment">-- @int[opt=0] y the y coordinate of the cell to be set
+</span><a id="144"></a><span class="comment">-- @int[opt=0] y the y coordinate of the cell to be set
 </span><span class="keyword">function</span> loveterm:setfg(fg, x, y)
   y = y <span class="keyword">or</span> <span class="number">0</span>
-  self.fg[x + y * self.width] = fg
+  <span class="keyword">local</span> index = x + y * self.width
+  <span class="keyword">local</span> oldfg = self.fg[index] <span class="keyword">or</span> self.defaultfg
+  self.fg[index] = blendColors(oldfg, fg)
   self:makeModified()
 <span class="keyword">end</span>
 
 <span class="comment">--- Set the background color at coordinates x, y to be bg.
 </span><span class="comment">-- @tparam Color bg the new background color
-</span><a id="142"></a><span class="comment">-- @int[opt=0] x the x coordinate of the cell to be set
+</span><span class="comment">-- @int[opt=0] x the x coordinate of the cell to be set
 </span><span class="comment">-- @int[opt=0] y the y coordinate of the cell to be set
 </span><span class="keyword">function</span> loveterm:setbg(bg, x, y)
   y = y <span class="keyword">or</span> <span class="number">0</span>
-  self.bg[x + y * self.width] = bg
+  <span class="keyword">local</span> index = x + y * self.width
+  <span class="keyword">local</span> oldbg = self.bg[index] <span class="keyword">or</span> self.defaultbg
+  self.bg[index] = blendColors(oldbg, bg)
   self:makeModified()
 <span class="keyword">end</span>
 
 <span class="comment">--- Set the foreground and background colors at coordinates x, y to be fg, bg.
 </span><span class="comment">-- @tparam Color fg the new foreground color
-</span><a id="152"></a><span class="comment">-- @tparam Color bg the new background color
+</span><span class="comment">-- @tparam Color bg the new background color
 </span><span class="comment">-- @int[opt=0] x the x coordinate of the cell to be set
 </span><span class="comment">-- @int[opt=0] y the y coordinate of the cell to be set
 </span><span class="keyword">function</span> loveterm:setColor(fg, bg, x, y)
@@ -220,7 +235,7 @@ end
   self:makeModified()
 <span class="keyword">end</span>
 
-<a id="162"></a><span class="comment">--- Set the character, foreground and background colors at coordinates x, y to be v, fg and bg.
+<span class="comment">--- Set the character, foreground and background colors at coordinates x, y to be v, fg and bg.
 </span><span class="comment">-- @int v the tile number
 </span><span class="comment">-- @tparam Color fg the new foreground color
 </span><span class="comment">-- @tparam Color bg the new background color
@@ -231,7 +246,7 @@ end
   self:setValue(v, x, y)
   self:setfg(fg, x, y)
   self:setbg(bg, x, y)
-  self:makeModified()<a id="173"></a>
+  self:makeModified()
 <span class="keyword">end</span>
 
 <span class="keyword">function</span> loveterm:makeModified()
@@ -243,7 +258,7 @@ end
   <span class="keyword">for</span> i = <span class="number">0</span>, self.width * self.height - <span class="number">1</span> <span class="keyword">do</span>
     self:set(<span class="number">0</span>, self.defaultfg, self.defaultbg, i + self.currentLine * self.height)
   <span class="keyword">end</span>
-<span class="keyword">end</span><a id="186"></a>
+<span class="keyword">end</span>
 
 <span class="comment">--- Get the number of the line at the top of the screen.
 </span><span class="comment">-- @treturn int the current line
@@ -256,7 +271,7 @@ end
 </span><span class="keyword">function</span> loveterm:setCurrentLine(lineNumber)
   self.currentLine = lineNumber
   self:makeModified()
-<span class="keyword">end</span><a id="199"></a>
+<span class="keyword">end</span>
 
 <span class="comment">--- Check if it is visible.
 </span><span class="comment">-- @treturn bool
@@ -265,7 +280,7 @@ end
 <span class="keyword">end</span>
 
 <span class="comment">--- Set whether or not it is visible.
-</span><a id="207"></a><span class="comment">--
+</span><span class="comment">--
 </span><span class="comment">-- Not visible objects aren't drawn when called with <a href="../index.html#draw">draw</a>.
 </span><span class="comment">-- @bool[opt=true] is_visible use false to hide it
 </span><span class="keyword">function</span> loveterm:setVisible(is_visible)
@@ -378,6 +393,60 @@ end
   <span class="keyword">end</span>
 <span class="keyword">end</span>
 
+<span class="comment">--- Draw an image to the screen.
+</span><span class="comment">--
+</span><span class="comment">-- The options table can include <a href="../index.html#setfg">setfg</a> (default: false), <a href="../index.html#setbg">setbg</a> (default: true),
+</span><span class="comment">-- <code>filter</code> (default: "linear", other possible setting is "nearest"), or <code>alpha</code>
+</span><span class="comment">-- (default: 255), which is the alpha to draw the image with.
+</span><span class="comment">-- @tparam Drawable drawable a love2d drawable object, such as an image or canvas
+</span><span class="comment">-- @tparam[opt={}] table options the options table
+</span><span class="comment">-- @int[opt=0] x the x coordinate of the screen to start drawing on
+</span><span class="comment">-- @int[opt=0] y the y coordinate of the screen to start drawing on
+</span><span class="comment">-- @int[opt=0] r orientation in radians
+</span><span class="comment">-- @int[opt=1] sx scale-factor (x-axis)
+</span><span class="comment">-- @int[opt=sx] sy scale-factor (y-axis)
+</span><span class="comment">-- @int[opt=0] ox origin offset (x-axis)
+</span><span class="comment">-- @int[opt=0] oy origin offset (y-axis)
+</span><span class="comment">-- @int[opt=0] kx shearing factor (x-axis)
+</span><span class="comment">-- @int[opt=0] ky shearing factor (y-axis)
+</span><span class="keyword">function</span> loveterm:drawImage(drawable, options, x, y, r, sx, sy, ox, oy, kx, ky)
+  x = x <span class="keyword">or</span> <span class="number">0</span>
+  y = y <span class="keyword">or</span> <span class="number">0</span>
+  r = r <span class="keyword">or</span> <span class="number">0</span>
+  sx = sx <span class="keyword">or</span> <span class="number">1</span>
+  sy = sy <span class="keyword">or</span> sx
+  ox = ox <span class="keyword">or</span> <span class="number">0</span>
+  oy = oy <span class="keyword">or</span> <span class="number">0</span>
+  kx = kx <span class="keyword">or</span> <span class="number">0</span>
+  ky = ky <span class="keyword">or</span> <span class="number">0</span>
+  options = options <span class="keyword">or</span> {}
+  setfg = options.setfg <span class="keyword">or</span> <span class="keyword">false</span>
+  setbg = options.setbg <span class="keyword">or</span> <span class="keyword">true</span>
+  filter = options.filter <span class="keyword">or</span> <span class="string">"linear"</span>
+  alpha = options.alpha <span class="keyword">or</span> <span class="number">255</span>
+
+  self.tempCanvas:setFilter(filter, filter)
+  love.graphics.setCanvas(self.tempCanvas)
+  love.graphics.clear()
+  love.graphics.draw(drawable, x, y, r, sx, sy, ox, oy)
+  love.graphics.setCanvas()
+
+  <span class="keyword">local</span> image = self.tempCanvas:newImageData()
+  <span class="keyword">for</span> ny = <span class="number">0</span>, image:getHeight()-<span class="number">1</span> <span class="keyword">do</span>
+    <span class="keyword">for</span> nx = <span class="number">0</span>, image:getWidth()-<span class="number">1</span> <span class="keyword">do</span>
+      <span class="keyword">local</span> r, g, b, a = image:getPixel(nx, ny)
+      a = <span class="global">math</span>.floor((a <span class="keyword">or</span> <span class="number">255</span>) * alpha/<span class="number">255</span>)
+      <span class="keyword">if</span> setfg <span class="keyword">then</span>
+        self:setfg({r, g, b, a}, nx, ny)
+      <span class="keyword">end</span>
+
+      <span class="keyword">if</span> setbg <span class="keyword">then</span>
+        self:setbg({r, g, b, a}, nx, ny)
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
 <span class="comment">--- Print a plaintext string to the screen.
 </span><span class="comment">--
 </span><span class="comment">-- Can also take two colored text of the form
@@ -406,12 +475,79 @@ end
   <span class="keyword">end</span>
 <span class="keyword">end</span>
 
+<span class="keyword">local</span> <span class="keyword">function</span> stripTrailingSpace(s)
+  <span class="keyword">while</span> s ~= <span class="string">""</span> <span class="keyword">and</span> s:sub(s:len()) == <span class="string">" "</span> <span class="keyword">do</span>
+    s = s:sub(<span class="number">1</span>, -<span class="number">2</span>)
+  <span class="keyword">end</span>
+  <span class="keyword">return</span> s
+<span class="keyword">end</span>
+
+<span class="keyword">local</span> <span class="keyword">function</span> flushRight(text, width)
+  <span class="keyword">local</span> acc = <span class="string">""</span>
+  <span class="keyword">local</span> <span class="keyword">function</span> iter()
+    <span class="keyword">local</span> iter_i = <span class="number">1</span>
+    <span class="keyword">return</span> <span class="keyword">function</span>()
+      <span class="keyword">if</span> iter_i &lt;= text:len() <span class="keyword">then</span>
+        <span class="keyword">local</span> newlines = text:match(<span class="string">"^\n+"</span>, iter_i)
+        <span class="keyword">if</span> newlines <span class="keyword">then</span>
+          acc = acc .. newlines
+          iter_i = iter_i + newlines:len()
+        <span class="keyword">end</span>
+        <span class="keyword">local</span> result = text:match(<span class="string">"^[^\n]+"</span>, iter_i)
+        iter_i = iter_i + result:len()
+        <span class="keyword">return</span> result
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+  <span class="keyword">for</span> line <span class="keyword">in</span> iter() <span class="keyword">do</span>
+    line = stripTrailingSpace(line)
+
+    <span class="keyword">for</span> i = <span class="number">1</span>, width - line:len() <span class="keyword">do</span>
+      acc = acc .. <span class="string">" "</span>
+    <span class="keyword">end</span>
+    acc = acc .. line
+  <span class="keyword">end</span>
+  <span class="keyword">return</span> acc
+<span class="keyword">end</span>
+
+<span class="keyword">local</span> <span class="keyword">function</span> centerText(text, width)
+  <span class="keyword">local</span> acc = <span class="string">""</span>
+  <span class="keyword">local</span> <span class="keyword">function</span> iter()
+    <span class="keyword">local</span> iter_i = <span class="number">1</span>
+    <span class="keyword">return</span> <span class="keyword">function</span>()
+      <span class="keyword">if</span> iter_i &lt;= text:len() <span class="keyword">then</span>
+        <span class="keyword">local</span> newlines = text:match(<span class="string">"^\n+"</span>, iter_i)
+        <span class="keyword">if</span> newlines <span class="keyword">then</span>
+          acc = acc .. newlines
+          iter_i = iter_i + newlines:len()
+        <span class="keyword">end</span>
+        <span class="keyword">local</span> result = text:match(<span class="string">"^[^\n]+"</span>, iter_i)
+        iter_i = iter_i + result:len()
+        <span class="keyword">return</span> result
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+  <span class="keyword">for</span> line <span class="keyword">in</span> iter() <span class="keyword">do</span>
+    line = stripTrailingSpace(line)
+
+    <span class="keyword">local</span> extraspace = width - line:len()
+    <span class="keyword">for</span> i = <span class="number">1</span>, <span class="global">math</span>.floor(extraspace/<span class="number">2</span>) <span class="keyword">do</span>
+      acc = acc .. <span class="string">" "</span>
+    <span class="keyword">end</span>
+    acc = acc .. line
+  <span class="keyword">end</span>
+  <span class="keyword">return</span> acc
+<span class="keyword">end</span>
+
 <span class="comment">--- Wrap a string according to a certain width.
 </span><span class="comment">-- @string s
 </span><span class="comment">-- @int width the maximum line width
+</span><span class="comment">-- @string[opt="left"] align the alignment of the text. Can be <code>&quot;left&quot;</code>, <code>&quot;right&quot;</code>, or <code>&quot;center&quot;</code>.
 </span><span class="comment">-- @treturn string the string with added newlines
-</span><span class="keyword">function</span> loveterm.wrapString(s, width)
-  <span class="global">assert</span>(<span class="global">type</span>(s) == <span class="string">"string"</span>, <span class="string">"The first argument of wrapString needs to be a string. Did you accidentally call it using a colon?"</span>)
+</span><span class="keyword">function</span> loveterm.wrapString(s, width, align)
+  <span class="global">assert</span>(<span class="global">type</span>(s) == <span class="string">"string"</span>, <span class="string">"The first argument of wrapString needs to "</span> ..
+      <span class="string">"be a string. Did you accidentally call it using a colon?"</span>)
+  align = align <span class="keyword">or</span> <span class="string">"left"</span>
   <span class="keyword">local</span> <span class="keyword">function</span> iter()
     <span class="keyword">local</span> iter_i = <span class="number">1</span>
     <span class="keyword">return</span> <span class="keyword">function</span>()
@@ -435,6 +571,7 @@ end
       <span class="keyword">return</span> result
     <span class="keyword">end</span>
   <span class="keyword">end</span>
+
 
   <span class="keyword">local</span> spaceLeft = width
   <span class="keyword">local</span> acc = <span class="string">""</span>
@@ -465,6 +602,11 @@ end
     spaceLeft = spaceLeft - token:len()
   <span class="keyword">end</span>
 
+  <span class="keyword">if</span> align == <span class="string">"right"</span> <span class="keyword">then</span>
+    <span class="keyword">return</span> flushRight(acc, width)
+  <span class="keyword">elseif</span> align == <span class="string">"center"</span> <span class="keyword">then</span>
+    <span class="keyword">return</span> centerText(acc, width)
+  <span class="keyword">end</span>
   <span class="keyword">return</span> acc
 <span class="keyword">end</span>
 
@@ -475,7 +617,7 @@ end
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-06-03 03:36:37 </i>
+<i style="float:right;">Last updated 2016-06-03 17:15:55 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
