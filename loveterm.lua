@@ -432,6 +432,13 @@ function loveterm:print(s, x, y)
   end
 end
 
+local function stripTrailingSpace(s)
+  while s ~= "" and s:sub(s:len()) == " " do
+    s = s:sub(1, -2)
+  end
+  return s
+end
+
 local function flushRight(text, width)
   local acc = ""
   local function iter()
@@ -450,12 +457,38 @@ local function flushRight(text, width)
     end
   end
   for line in iter() do
-    -- remove trailing whitespace
-    while line ~= "" and line:sub(line:len()) == " " do
-      line = line:sub(1, -2)
-    end
+    line = stripTrailingSpace(line)
 
     for i = 1, width - line:len() do
+      acc = acc .. " "
+    end
+    acc = acc .. line
+  end
+  return acc
+end
+
+local function centerText(text, width)
+  local acc = ""
+  local function iter()
+    local iter_i = 1
+    return function()
+      if iter_i <= text:len() then
+        local newlines = text:match("^\n+", iter_i)
+        if newlines then
+          acc = acc .. newlines
+          iter_i = iter_i + newlines:len()
+        end
+        local result = text:match("^[^\n]+", iter_i)
+        iter_i = iter_i + result:len()
+        return result
+      end
+    end
+  end
+  for line in iter() do
+    line = stripTrailingSpace(line)
+
+    local extraspace = width - line:len()
+    for i = 1, math.floor(extraspace/2) do
       acc = acc .. " "
     end
     acc = acc .. line
@@ -527,6 +560,8 @@ function loveterm.wrapString(s, width, align)
 
   if align == "right" then
     return flushRight(acc, width)
+  elseif align == "center" then
+    return centerText(acc, width)
   end
   return acc
 end
