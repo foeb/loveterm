@@ -1,5 +1,5 @@
 # ![](assets/header.png)
-> Simple 1-bit tiled graphics for Love2d
+> Simple 1-bit tiled graphics for [Love2d](https://love2d.org/)
 
 LoveTerm is a small library for drawing tiled greyscaled images with 
 foreground and background colors. Its main intended use is to emulate
