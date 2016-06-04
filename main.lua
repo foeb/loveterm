@@ -11,12 +11,10 @@ function love.load()
       math.floor(love.graphics.getHeight()/8))
   
   -- Print a wrapped string to our screen at the coordinates 5, 5
-  screen:print(
-      screen.wrapString(
-          "LoveTerm is a small library for drawing 1-bit tiled " ..
-          "graphics, such as terminal emulators.",
-          21),
-      5, 5)
+  screen:printf(
+      "LoveTerm is a small library for drawing 1-bit tiled " ..
+      "graphics, such as terminal emulators.",
+      5, 5, 21)
   -- Now let's add a pink heart next to it
   screen:set(codes.heart, palette.pink, screen.defaultbg, 3, 5)
   

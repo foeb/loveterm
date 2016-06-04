@@ -439,7 +439,7 @@ end
 -- @int[opt=78] width the maximum line width
 -- @string[opt="left"] align can be `"left"`, `"right"`, or `"center"`
 function loveterm:printf(s, x, y, width, align)
-  self:print(self:wrapString(s, width, align), x, y)
+  self:print(self.wrapString(s, width, align), x, y)
 end
 
 local function stripTrailingSpace(s)
