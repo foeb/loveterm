@@ -432,6 +432,16 @@ function loveterm:print(s, x, y)
   end
 end
 
+--- Format and print a plaintext string to the screen.
+-- @string s the string to be printed
+-- @int[opt=0] x
+-- @int[opt=0] y
+-- @int[opt=78] width the maximum line width
+-- @string[opt="left"] align can be `"left"`, `"right"`, or `"center"`
+function loveterm:printf(s, x, y, width, align)
+  self:print(self:wrapString(s, width, align), x, y)
+end
+
 local function stripTrailingSpace(s)
   while s ~= "" and s:sub(s:len()) == " " do
     s = s:sub(1, -2)
@@ -498,12 +508,13 @@ end
 
 --- Wrap a string according to a certain width.
 -- @string s
--- @int width the maximum line width
+-- @int[opt=78] width the maximum line width
 -- @string[opt="left"] align the alignment of the text. Can be `"left"`, `"right"`, or `"center"`.
 -- @treturn string the string with added newlines
 function loveterm.wrapString(s, width, align)
   assert(type(s) == "string", "The first argument of wrapString needs to " ..
       "be a string. Did you accidentally call it using a colon?")
+  width = width or 78
   align = align or "left"
   local function iter()
     local iter_i = 1

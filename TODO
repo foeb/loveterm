@@ -2,4 +2,3 @@ TODO
 
  - Get loveterm.wrapString to be able to use two colored text
  - Add justified and centered text
- - Add printf as a combination of print and wrapString
