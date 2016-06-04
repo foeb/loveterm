@@ -34,6 +34,7 @@
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../index.html">loveterm</a></li>
 </ul>
+</ul>
 
 </div>
 
@@ -60,6 +61,8 @@
 </span>
 
 <span class="comment">--- LoveTerm - simple 1-bit tiled graphics for Love2d
+</span><span class="comment">--
+</span><span class="comment">-- Full example: <a href="../source/main.lua.html#">main.lua</a>
 </span><span class="comment">-- @module loveterm
 </span><span class="comment">-- @author Mina Phoebe Bell
 </span><span class="comment">-- @license CC0
@@ -89,7 +92,6 @@ end
 ]]</span>
 
 <span class="comment">--- Create and initialize a new loveterm object.
-</span><span class="comment">-- @function create
 </span><span class="comment">-- @string tileset a string of the location of the tileset image
 </span><span class="comment">-- @int width the maximum number of tiles displayed on the x-axis
 </span><span class="comment">-- @int height the maximum number of tiles displayed on the y-axis
@@ -116,7 +118,7 @@ end
   s.tilesetWidth = tilesetWidth <span class="keyword">or</span> <span class="number">16</span>
   s.tilesetHeight  = tilesetHeight <span class="keyword">or</span> <span class="number">16</span>
   s.tileWidth = s.tileset:getWidth()/s.tilesetWidth
-  s.tileHeight = s.tileset:getHeight()/s.tilesetHeight<a id="58"></a>
+  s.tileHeight = s.tileset:getHeight()/s.tilesetHeight<a id="59"></a>
   s.tilesetQuads = {}
   <span class="keyword">for</span> i = <span class="number">0</span>, <span class="number">255</span> <span class="keyword">do</span>
     s.tilesetQuads[i] = love.graphics.newQuad(
@@ -137,6 +139,8 @@ end
 <span class="keyword">end</span>
 
 <span class="comment">--- Draw the canvas at x, y.
+</span><span class="comment">-- @function draw
+</span><span class="comment">-- @method
 </span><span class="comment">-- @int[opt=0] x the x coordinate in pixels
 </span><span class="comment">-- @int[opt=0] y the y coordinate in pixels
 </span><span class="comment">-- @bool[opt=false] force flush the loveterm object no matter what
@@ -153,12 +157,13 @@ end
 <span class="keyword">end</span>
 
 <span class="comment">--- Render to the canvas.
+</span><span class="comment">-- @method
 </span><span class="keyword">function</span> loveterm:flush()
   self.modifiedDraw = <span class="keyword">false</span>
   love.graphics.setCanvas(self.canvas)
   <span class="keyword">local</span> start = self.currentLine * self.width
-  <span class="keyword">for</span> i = start, self.width * self.height - <span class="number">1</span> + start <span class="keyword">do</span>
-    love.graphics.setColor(self.bg[i] <span class="keyword">or</span> self.defaultbg)<a id="100"></a>
+  <span class="keyword">for</span> i = start, self.width * self.height - <span class="number">1</span> + start <span class="keyword">do</span><a id="103"></a>
+    love.graphics.setColor(self.bg[i] <span class="keyword">or</span> self.defaultbg)
     love.graphics.rectangle(
         <span class="string">"fill"</span>,
         (i % self.width) * self.tileWidth,
@@ -171,12 +176,13 @@ end
         self.tilesetQuads[self.values[i] <span class="keyword">or</span> <span class="number">0</span>],
         (i % self.width) * self.tileWidth,
         <span class="global">math</span>.floor((i - start) / self.width) * self.tileHeight)
-  <span class="keyword">end</span><a id="113"></a>
+  <span class="keyword">end</span><a id="117"></a>
   love.graphics.setColor(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>)
   love.graphics.setCanvas()
 <span class="keyword">end</span>
 
 <span class="comment">--- Set the character at coordinates x, y to be v.
+</span><span class="comment">-- @method
 </span><span class="comment">-- @int v the tile number
 </span><span class="comment">-- @int x the x coordinate of the cell to be set
 </span><span class="comment">-- @int[opt=0] y the y coordinate of the cell to be set
@@ -200,9 +206,10 @@ end
 <span class="keyword">end</span>
 
 <span class="comment">--- Set the foreground color at coordinates x, y to be fg.
+</span><span class="comment">-- @method
 </span><span class="comment">-- @tparam Color fg the new foreground color
-</span><span class="comment">-- @int x the x coordinate of the cell to be set
-</span><a id="144"></a><span class="comment">-- @int[opt=0] y the y coordinate of the cell to be set
+</span><a id="149"></a><span class="comment">-- @int x the x coordinate of the cell to be set
+</span><span class="comment">-- @int[opt=0] y the y coordinate of the cell to be set
 </span><span class="keyword">function</span> loveterm:setfg(fg, x, y)
   y = y <span class="keyword">or</span> <span class="number">0</span>
   <span class="keyword">local</span> index = x + y * self.width
@@ -212,6 +219,7 @@ end
 <span class="keyword">end</span>
 
 <span class="comment">--- Set the background color at coordinates x, y to be bg.
+</span><span class="comment">-- @method
 </span><span class="comment">-- @tparam Color bg the new background color
 </span><span class="comment">-- @int[opt=0] x the x coordinate of the cell to be set
 </span><span class="comment">-- @int[opt=0] y the y coordinate of the cell to be set
@@ -220,10 +228,11 @@ end
   <span class="keyword">local</span> index = x + y * self.width
   <span class="keyword">local</span> oldbg = self.bg[index] <span class="keyword">or</span> self.defaultbg
   self.bg[index] = blendColors(oldbg, bg)
-  self:makeModified()
+  self:makeModified()<a id="169"></a>
 <span class="keyword">end</span>
 
 <span class="comment">--- Set the foreground and background colors at coordinates x, y to be fg, bg.
+</span><span class="comment">-- @method
 </span><span class="comment">-- @tparam Color fg the new foreground color
 </span><span class="comment">-- @tparam Color bg the new background color
 </span><span class="comment">-- @int[opt=0] x the x coordinate of the cell to be set
@@ -232,10 +241,11 @@ end
   y = y <span class="keyword">or</span> <span class="number">0</span>
   self:setfg(fg, x, y)
   self:setbg(bg, x, y)
-  self:makeModified()
+  self:makeModified()<a id="182"></a>
 <span class="keyword">end</span>
 
 <span class="comment">--- Set the character, foreground and background colors at coordinates x, y to be v, fg and bg.
+</span><span class="comment">-- @method
 </span><span class="comment">-- @int v the tile number
 </span><span class="comment">-- @tparam Color fg the new foreground color
 </span><span class="comment">-- @tparam Color bg the new background color
@@ -245,46 +255,54 @@ end
   y = y <span class="keyword">or</span> <span class="number">0</span>
   self:setValue(v, x, y)
   self:setfg(fg, x, y)
-  self:setbg(bg, x, y)
+  self:setbg(bg, x, y)<a id="196"></a>
   self:makeModified()
 <span class="keyword">end</span>
 
-<span class="keyword">function</span> loveterm:makeModified()
+<span class="comment">--- Flip the <code>modifiedDraw</code> flag so that the screen is rerendered next time <a href="../index.html#draw">draw</a> is called.
+</span><span class="comment">-- @local
+</span><span class="comment">-- @method
+</span><span class="keyword">function</span> loveterm:makeModified()
   self.modifiedDraw = <span class="keyword">true</span>
 <span class="keyword">end</span>
 
 <span class="comment">--- Empty the screen back to the default background color.
+</span><span class="comment">-- @method
 </span><span class="keyword">function</span> loveterm:clear()
-  <span class="keyword">for</span> i = <span class="number">0</span>, self.width * self.height - <span class="number">1</span> <span class="keyword">do</span>
+  <span class="keyword">for</span> i = <span class="number">0</span>, self.width * self.height - <span class="number">1</span> <span class="keyword">do</span><a id="210"></a>
     self:set(<span class="number">0</span>, self.defaultfg, self.defaultbg, i + self.currentLine * self.height)
   <span class="keyword">end</span>
 <span class="keyword">end</span>
 
 <span class="comment">--- Get the number of the line at the top of the screen.
+</span><span class="comment">-- @method
 </span><span class="comment">-- @treturn int the current line
 </span><span class="keyword">function</span> loveterm:getCurrentLine()
   <span class="keyword">return</span> self.currentLine
 <span class="keyword">end</span>
 
 <span class="comment">--- Set the current line number. This is useful for scrolling.
+</span><span class="comment">-- @method
 </span><span class="comment">-- @int lineNumber the new line number
 </span><span class="keyword">function</span> loveterm:setCurrentLine(lineNumber)
   self.currentLine = lineNumber
-  self:makeModified()
+  self:makeModified()<a id="227"></a>
 <span class="keyword">end</span>
 
 <span class="comment">--- Check if it is visible.
+</span><span class="comment">-- @method
 </span><span class="comment">-- @treturn bool
 </span><span class="keyword">function</span> loveterm:is_visible()
   <span class="keyword">return</span> self.visible
-<span class="keyword">end</span>
+<span class="keyword">end</span><a id="236"></a>
 
 <span class="comment">--- Set whether or not it is visible.
 </span><span class="comment">--
 </span><span class="comment">-- Not visible objects aren't drawn when called with <a href="../index.html#draw">draw</a>.
+</span><span class="comment">-- @method
 </span><span class="comment">-- @bool[opt=true] is_visible use false to hide it
 </span><span class="keyword">function</span> loveterm:setVisible(is_visible)
-  is_visible = is_visible <span class="keyword">or</span> <span class="keyword">true</span>
+  is_visible = is_visible <span class="keyword">or</span> <span class="keyword">true</span><a id="243"></a>
   self.visible = is_visible
 <span class="keyword">end</span>
 
@@ -292,16 +310,16 @@ end
 </span><span class="comment">--
 </span><span class="comment">-- The <code>options</code> table has the fields <code>fg</code> and <code>bg</code> to set the colors, as
 </span><span class="comment">-- well as <code>topLeft</code>, <code>topRight</code>, <code>bottomLeft</code>, <code>bottomRight</code>,
-</span><span class="comment">-- <code>vertical</code>, and <code>horizontal</code> to set the various components of the
+</span><a id="251"></a><span class="comment">-- <code>vertical</code>, and <code>horizontal</code> to set the various components of the
 </span><span class="comment">-- rectangle when mode is set to <a href="../index.html#line">line</a>. <code>options</code> also has a <code>fill</code>
 </span><span class="comment">-- field to set which character is drawn when mode is <code>fill</code>.
-</span><span class="comment">-- @function loveterm:rectangle
+</span><span class="comment">-- @method
 </span><span class="comment">-- @param mode can either be "fill" or "line"
 </span><span class="comment">-- @int x
 </span><span class="comment">-- @int y
 </span><span class="comment">-- @int w the width of the rectangle in cells
 </span><span class="comment">-- @int h the height of the rectangle in cells
-</span><span class="comment">-- @tparam table options
+</span><a id="260"></a><span class="comment">-- @tparam table options
 </span><span class="keyword">function</span> loveterm:rectangle(mode, x, y, w, h, options)
   <span class="global">assert</span>(mode == <span class="string">"fill"</span> <span class="keyword">or</span> mode == <span class="string">"line"</span>, <span class="string">"Unknown mode: "</span> .. <span class="global">tostring</span>(mode))
   options = options <span class="keyword">or</span> {}
@@ -320,7 +338,7 @@ end
       <span class="keyword">if</span> mode == <span class="string">"line"</span> <span class="keyword">then</span>
         <span class="keyword">if</span> ny == y <span class="keyword">and</span> nx == x <span class="keyword">then</span>
           self:set(topLeft, fg, bg, nx, ny)
-        <span class="keyword">elseif</span> ny == y <span class="keyword">and</span> nx == x + w <span class="keyword">then</span>
+        <span class="keyword">elseif</span> ny == y <span class="keyword">and</span> nx == x + w <span class="keyword">then</span><a id="279"></a>
           self:set(topRight, fg, bg, nx, ny)
         <span class="keyword">elseif</span> ny == y + h <span class="keyword">and</span> nx == x <span class="keyword">then</span>
           self:set(bottomLeft, fg, bg, nx, ny)
@@ -341,6 +359,7 @@ end
 <span class="keyword">end</span>
 
 <span class="comment">--- Adds a line from (x1, y1) to (x2, y2) on the screen.
+</span><span class="comment">--  @method
 </span><span class="comment">--  @int x1
 </span><span class="comment">--  @int y1
 </span><span class="comment">--  @int x2
@@ -353,18 +372,20 @@ end
   bg = bg <span class="keyword">or</span> self.defaultbg
   v = v <span class="keyword">or</span> <span class="number">219</span>
 
-  <span class="keyword">local</span> <span class="keyword">function</span> plotfn(_, x, y)
-    self:set(v, fg, bg, x, y)
+  <span class="keyword">local</span> <span class="keyword">function</span> plotfn(screen, x, y)
+    loveterm.set(screen, v, fg, bg, x, y)
   <span class="keyword">end</span>
 
   loveterm.bresenham(<span class="keyword">nil</span>, plotfn, x1, y1, x2, y2)
 <span class="keyword">end</span>
 
 <span class="comment">--- Plots a line from (x1, y1) to (x2, y2) on map using a function
+</span><span class="comment">--
+</span><span class="comment">-- See the source code of <a href="../index.html#line">line</a> for an example of use.
 </span><span class="comment">-- @param map passed as the first argument to <code>plotfn</code>
 </span><span class="comment">-- @tparam function(map,x,y) plotfn called every time a point is plotted
 </span><span class="comment">-- @int x1
-</span><span class="comment">-- @int y1
+</span><a id="326"></a><span class="comment">-- @int y1
 </span><span class="comment">-- @int x2
 </span><span class="comment">-- @int y2
 </span><span class="keyword">function</span> loveterm.bresenham(map, plotfn, x1, y1, x2, y2)
@@ -414,6 +435,7 @@ end
 </span><span class="comment">-- The options table can include <a href="../index.html#setfg">setfg</a> (default: false), <a href="../index.html#setbg">setbg</a> (default: true),
 </span><span class="comment">-- <code>filter</code> (default: "linear", other possible setting is "nearest"), or <code>alpha</code>
 </span><span class="comment">-- (default: 255), which is the alpha to draw the image with.
+</span><span class="comment">-- @method
 </span><span class="comment">-- @tparam Drawable drawable a love2d drawable object, such as an image or canvas
 </span><span class="comment">-- @tparam[opt={}] table options the options table
 </span><span class="comment">-- @int[opt=0] x the x coordinate of the screen to start drawing on
@@ -467,6 +489,7 @@ end
 </span><span class="comment">--
 </span><span class="comment">-- Can also take two colored text of the form
 </span><span class="comment">-- { fgcolor1, bgcolor1, string1, fgcolor2, ... }
+</span><span class="comment">-- @method
 </span><span class="comment">-- @param s the string or two colored text to be printed
 </span><span class="comment">-- @int[opt=0] x
 </span><span class="comment">-- @int[opt=0] y
@@ -492,6 +515,7 @@ end
 <span class="keyword">end</span>
 
 <span class="comment">--- Format and print a plaintext string to the screen.
+</span><span class="comment">-- @method
 </span><span class="comment">-- @string s the string to be printed
 </span><span class="comment">-- @int[opt=0] x
 </span><span class="comment">-- @int[opt=0] y
@@ -644,7 +668,7 @@ end
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-06-03 18:43:46 </i>
+<i style="float:right;">Last updated 2016-06-03 22:46:52 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

@@ -34,6 +34,7 @@
   <li><strong>loveterm</strong></li>
 </ul>
 </ul>
+</ul>
 
 </div>
 
@@ -41,9 +42,7 @@
 
 <h1>Module <code>loveterm</code></h1>
 <p>LoveTerm - simple 1-bit tiled graphics for Love2d</p>
-<p>
-
-</p>
+<p> Full example: <a href="source/main.lua.html#">main.lua</a></p>
     <h3>Usage:</h3>
     <ul>
         <pre class="example">local loveterm = require &quot;loveterm&quot;
@@ -80,16 +79,17 @@ end
     <dt>
     <a name = "create"></a>
     <strong>create (tileset, width, height, fg, bg[, tilesetWidth=16[, tilesetHeight=16]])</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#58">line 58</a>
+    <a style="float:right;" href="source/loveterm.lua.html#59">line 59</a>
     </dt>
     <dd>
     Create and initialize a new loveterm object.
 
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">tileset</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+            <span class="types"><span class="type">string</span></span>
          a string of the location of the tileset image
         </li>
         <li><span class="parameter">width</span>
@@ -132,12 +132,13 @@ end
 </dd>
     <dt>
     <a name = "draw"></a>
-    <strong>draw ([x=0[, y=0[, force=false]]])</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#100">line 100</a>
+    <strong>draw([x=0[, y=0[, force=false]]]) <i style="font-weight: normal;">method</i></strong>
+    <a style="float:right;" href="source/loveterm.lua.html#103">line 103</a>
     </dt>
     <dd>
     Draw the canvas at x, y.
 
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -165,12 +166,13 @@ end
 </dd>
     <dt>
     <a name = "flush"></a>
-    <strong>flush ()</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#113">line 113</a>
+    <strong>flush() <i style="font-weight: normal;">method</i></strong>
+    <a style="float:right;" href="source/loveterm.lua.html#117">line 117</a>
     </dt>
     <dd>
     Render to the canvas.
 
+    </ul>
 
 
 
@@ -180,12 +182,13 @@ end
 </dd>
     <dt>
     <a name = "setValue"></a>
-    <strong>setValue (v, x[, y=0])</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#144">line 144</a>
+    <strong>setValue(v, x[, y=0]) <i style="font-weight: normal;">method</i></strong>
+    <a style="float:right;" href="source/loveterm.lua.html#149">line 149</a>
     </dt>
     <dd>
     Set the character at coordinates x, y to be v.
 
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -218,12 +221,13 @@ end
 </dd>
     <dt>
     <a name = "setfg"></a>
-    <strong>setfg (fg, x[, y=0])</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#163">line 163</a>
+    <strong>setfg(fg, x[, y=0]) <i style="font-weight: normal;">method</i></strong>
+    <a style="float:right;" href="source/loveterm.lua.html#169">line 169</a>
     </dt>
     <dd>
     Set the foreground color at coordinates x, y to be fg.
 
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -249,12 +253,13 @@ end
 </dd>
     <dt>
     <a name = "setbg"></a>
-    <strong>setbg (bg[, x=0[, y=0]])</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#175">line 175</a>
+    <strong>setbg(bg[, x=0[, y=0]]) <i style="font-weight: normal;">method</i></strong>
+    <a style="float:right;" href="source/loveterm.lua.html#182">line 182</a>
     </dt>
     <dd>
     Set the background color at coordinates x, y to be bg.
 
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -281,12 +286,13 @@ end
 </dd>
     <dt>
     <a name = "setColor"></a>
-    <strong>setColor (fg, bg[, x=0[, y=0]])</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#188">line 188</a>
+    <strong>setColor(fg, bg[, x=0[, y=0]]) <i style="font-weight: normal;">method</i></strong>
+    <a style="float:right;" href="source/loveterm.lua.html#196">line 196</a>
     </dt>
     <dd>
     Set the foreground and background colors at coordinates x, y to be fg, bg.
 
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -317,12 +323,13 @@ end
 </dd>
     <dt>
     <a name = "set"></a>
-    <strong>set (v, fg, bg[, x=0[, y=0]])</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#201">line 201</a>
+    <strong>set(v, fg, bg[, x=0[, y=0]]) <i style="font-weight: normal;">method</i></strong>
+    <a style="float:right;" href="source/loveterm.lua.html#210">line 210</a>
     </dt>
     <dd>
     Set the character, foreground and background colors at coordinates x, y to be v, fg and bg.
 
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -357,12 +364,13 @@ end
 </dd>
     <dt>
     <a name = "clear"></a>
-    <strong>clear ()</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#214">line 214</a>
+    <strong>clear() <i style="font-weight: normal;">method</i></strong>
+    <a style="float:right;" href="source/loveterm.lua.html#227">line 227</a>
     </dt>
     <dd>
     Empty the screen back to the default background color.
 
+    </ul>
 
 
 
@@ -372,12 +380,13 @@ end
 </dd>
     <dt>
     <a name = "getCurrentLine"></a>
-    <strong>getCurrentLine ()</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#222">line 222</a>
+    <strong>getCurrentLine() <i style="font-weight: normal;">method</i></strong>
+    <a style="float:right;" href="source/loveterm.lua.html#236">line 236</a>
     </dt>
     <dd>
     Get the number of the line at the top of the screen.
 
+    </ul>
 
 
     <h3>Returns:</h3>
@@ -393,12 +402,13 @@ end
 </dd>
     <dt>
     <a name = "setCurrentLine"></a>
-    <strong>setCurrentLine (lineNumber)</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#228">line 228</a>
+    <strong>setCurrentLine(lineNumber) <i style="font-weight: normal;">method</i></strong>
+    <a style="float:right;" href="source/loveterm.lua.html#243">line 243</a>
     </dt>
     <dd>
     Set the current line number.  This is useful for scrolling.
 
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -415,12 +425,13 @@ end
 </dd>
     <dt>
     <a name = "is_visible"></a>
-    <strong>is_visible ()</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#235">line 235</a>
+    <strong>is_visible() <i style="font-weight: normal;">method</i></strong>
+    <a style="float:right;" href="source/loveterm.lua.html#251">line 251</a>
     </dt>
     <dd>
     Check if it is visible.
 
+    </ul>
 
 
     <h3>Returns:</h3>
@@ -438,14 +449,15 @@ end
 </dd>
     <dt>
     <a name = "setVisible"></a>
-    <strong>setVisible ([is_visible=true])</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#243">line 243</a>
+    <strong>setVisible([is_visible=true]) <i style="font-weight: normal;">method</i></strong>
+    <a style="float:right;" href="source/loveterm.lua.html#260">line 260</a>
     </dt>
     <dd>
     Set whether or not it is visible. </p>
 
 <p> Not visible objects aren't drawn when called with <a href="index.html#draw">draw</a>.
 
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -463,8 +475,8 @@ end
 </dd>
     <dt>
     <a name = "rectangle"></a>
-    <strong>rectangle (mode, x, y, w, h, options)</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#262">line 262</a>
+    <strong>rectangle(mode, x, y, w, h, options) <i style="font-weight: normal;">method</i></strong>
+    <a style="float:right;" href="source/loveterm.lua.html#279">line 279</a>
     </dt>
     <dd>
     Adds a rectangle to the screen. </p>
@@ -475,6 +487,7 @@ end
  rectangle when mode is set to <a href="index.html#line">line</a>. <code>options</code> also has a <code>fill</code>
  field to set which character is drawn when mode is <code>fill</code>.
 
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -502,7 +515,7 @@ end
          the height of the rectangle in cells
         </li>
         <li><span class="parameter">options</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+            <span class="types"><span class="type">table</span></span>
 
 
 
@@ -516,12 +529,13 @@ end
 </dd>
     <dt>
     <a name = "line"></a>
-    <strong>line (x1, y1, x2, y2, fg, bg, v)</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#308">line 308</a>
+    <strong>line(x1, y1, x2, y2, fg, bg, v) <i style="font-weight: normal;">method</i></strong>
+    <a style="float:right;" href="source/loveterm.lua.html#326">line 326</a>
     </dt>
     <dd>
     Adds a line from (x1, y1) to (x2, y2) on the screen.
 
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -571,11 +585,12 @@ end
     <dt>
     <a name = "bresenham"></a>
     <strong>bresenham (map, plotfn, x1, y1, x2, y2)</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#327">line 327</a>
+    <a style="float:right;" href="source/loveterm.lua.html#347">line 347</a>
     </dt>
     <dd>
-    Plots a line from (x1, y1) to (x2, y2) on map using a function
+    Plots a line from (x1, y1) to (x2, y2) on map using a function  See the source code of <a href="index.html#line">line</a> for an example of use.
 
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -619,8 +634,8 @@ end
 </dd>
     <dt>
     <a name = "drawImage"></a>
-    <strong>drawImage (drawable[, options={}[, x=0[, y=0[, r=0[, sx=1[, sy=sx[, ox=0[, oy=0[, kx=0[, ky=0]]]]]]]]]])</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#385">line 385</a>
+    <strong>drawImage(drawable[, options={}[, x=0[, y=0[, r=0[, sx=1[, sy=sx[, ox=0[, oy=0[, kx=0[, ky=0]]]]]]]]]]) <i style="font-weight: normal;">method</i></strong>
+    <a style="float:right;" href="source/loveterm.lua.html#406">line 406</a>
     </dt>
     <dd>
     Draw an image to the screen. </p>
@@ -629,6 +644,7 @@ end
  <code>filter</code> (default: "linear", other possible setting is "nearest"), or <code>alpha</code>
  (default: 255), which is the alpha to draw the image with.
 
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -637,7 +653,7 @@ end
          a love2d drawable object, such as an image or canvas
         </li>
         <li><span class="parameter">options</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+            <span class="types"><span class="type">table</span></span>
          the options table
          (<em>default</em> {})
         </li>
@@ -695,8 +711,8 @@ end
 </dd>
     <dt>
     <a name = "print"></a>
-    <strong>print (s[, x=0[, y=0]])</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#430">line 430</a>
+    <strong>print(s[, x=0[, y=0]]) <i style="font-weight: normal;">method</i></strong>
+    <a style="float:right;" href="source/loveterm.lua.html#452">line 452</a>
     </dt>
     <dd>
     Print a plaintext string to the screen. </p>
@@ -704,6 +720,7 @@ end
 <p> Can also take two colored text of the form
  { fgcolor1, bgcolor1, string1, fgcolor2, ... }
 
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
@@ -733,17 +750,18 @@ end
 </dd>
     <dt>
     <a name = "printf"></a>
-    <strong>printf (s[, x=0[, y=0[, width=78[, align="left"]]]])</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#457">line 457</a>
+    <strong>printf(s[, x=0[, y=0[, width=78[, align="left"]]]]) <i style="font-weight: normal;">method</i></strong>
+    <a style="float:right;" href="source/loveterm.lua.html#480">line 480</a>
     </dt>
     <dd>
     Format and print a plaintext string to the screen.
 
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">s</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+            <span class="types"><span class="type">string</span></span>
          the string to be printed
         </li>
         <li><span class="parameter">x</span>
@@ -766,7 +784,7 @@ end
          (<em>default</em> 78)
         </li>
         <li><span class="parameter">align</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+            <span class="types"><span class="type">string</span></span>
          can be <code>&quot;left&quot;</code>, <code>&quot;right&quot;</code>, or <code>&quot;center&quot;</code>
          (<em>default</em> "left")
         </li>
@@ -780,16 +798,17 @@ end
     <dt>
     <a name = "wrapString"></a>
     <strong>wrapString (s[, width=78[, align="left"]])</strong>
-    <a style="float:right;" href="source/loveterm.lua.html#530">line 530</a>
+    <a style="float:right;" href="source/loveterm.lua.html#553">line 553</a>
     </dt>
     <dd>
     Wrap a string according to a certain width.
 
+    </ul>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">s</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+            <span class="types"><span class="type">string</span></span>
 
 
 
@@ -800,7 +819,7 @@ end
          (<em>default</em> 78)
         </li>
         <li><span class="parameter">align</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+            <span class="types"><span class="type">string</span></span>
          the alignment of the text. Can be <code>&quot;left&quot;</code>, <code>&quot;right&quot;</code>, or <code>&quot;center&quot;</code>.
          (<em>default</em> "left")
         </li>
@@ -809,7 +828,7 @@ end
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+           <span class="types"><span class="type">string</span></span>
         the string with added newlines
     </ol>
 
@@ -824,7 +843,7 @@ end
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-06-03 18:43:46 </i>
+<i style="float:right;">Last updated 2016-06-03 22:46:52 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

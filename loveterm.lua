@@ -17,6 +17,8 @@
 
 
 --- LoveTerm - simple 1-bit tiled graphics for Love2d
+--
+-- Full example: @{main.lua}
 -- @module loveterm
 -- @author Mina Phoebe Bell
 -- @license CC0
@@ -46,7 +48,6 @@ end
 ]]
 
 --- Create and initialize a new loveterm object.
--- @function create
 -- @string tileset a string of the location of the tileset image
 -- @int width the maximum number of tiles displayed on the x-axis
 -- @int height the maximum number of tiles displayed on the y-axis
@@ -94,6 +95,8 @@ function loveterm.create(tileset, width, height, fg, bg, tilesetWidth, tilesetHe
 end
 
 --- Draw the canvas at x, y.
+-- @function draw
+-- @method
 -- @int[opt=0] x the x coordinate in pixels
 -- @int[opt=0] y the y coordinate in pixels
 -- @bool[opt=false] force flush the loveterm object no matter what
@@ -110,6 +113,7 @@ function loveterm:draw(x, y, force)
 end
 
 --- Render to the canvas.
+-- @method
 function loveterm:flush()
   self.modifiedDraw = false
   love.graphics.setCanvas(self.canvas)
@@ -134,6 +138,7 @@ function loveterm:flush()
 end
 
 --- Set the character at coordinates x, y to be v.
+-- @method
 -- @int v the tile number
 -- @int x the x coordinate of the cell to be set
 -- @int[opt=0] y the y coordinate of the cell to be set
@@ -157,6 +162,7 @@ local function blendColors(c1, c2)
 end
 
 --- Set the foreground color at coordinates x, y to be fg.
+-- @method
 -- @tparam Color fg the new foreground color
 -- @int x the x coordinate of the cell to be set
 -- @int[opt=0] y the y coordinate of the cell to be set
@@ -169,6 +175,7 @@ function loveterm:setfg(fg, x, y)
 end
 
 --- Set the background color at coordinates x, y to be bg.
+-- @method
 -- @tparam Color bg the new background color
 -- @int[opt=0] x the x coordinate of the cell to be set
 -- @int[opt=0] y the y coordinate of the cell to be set
@@ -181,6 +188,7 @@ function loveterm:setbg(bg, x, y)
 end
 
 --- Set the foreground and background colors at coordinates x, y to be fg, bg.
+-- @method
 -- @tparam Color fg the new foreground color
 -- @tparam Color bg the new background color
 -- @int[opt=0] x the x coordinate of the cell to be set
@@ -193,6 +201,7 @@ function loveterm:setColor(fg, bg, x, y)
 end
 
 --- Set the character, foreground and background colors at coordinates x, y to be v, fg and bg.
+-- @method
 -- @int v the tile number
 -- @tparam Color fg the new foreground color
 -- @tparam Color bg the new background color
@@ -206,11 +215,15 @@ function loveterm:set(v, fg, bg, x, y)
   self:makeModified()
 end
 
+--- Flip the `modifiedDraw` flag so that the screen is rerendered next time `draw` is called.
+-- @local
+-- @method
 function loveterm:makeModified()
   self.modifiedDraw = true
 end
 
 --- Empty the screen back to the default background color.
+-- @method
 function loveterm:clear()
   for i = 0, self.width * self.height - 1 do
     self:set(0, self.defaultfg, self.defaultbg, i + self.currentLine * self.height)
@@ -218,12 +231,14 @@ function loveterm:clear()
 end
 
 --- Get the number of the line at the top of the screen.
+-- @method
 -- @treturn int the current line
 function loveterm:getCurrentLine()
   return self.currentLine
 end
 
 --- Set the current line number. This is useful for scrolling.
+-- @method
 -- @int lineNumber the new line number
 function loveterm:setCurrentLine(lineNumber)
   self.currentLine = lineNumber
@@ -231,6 +246,7 @@ function loveterm:setCurrentLine(lineNumber)
 end
 
 --- Check if it is visible.
+-- @method
 -- @treturn bool
 function loveterm:is_visible()
   return self.visible
@@ -239,6 +255,7 @@ end
 --- Set whether or not it is visible.
 --
 -- Not visible objects aren't drawn when called with @{draw}.
+-- @method
 -- @bool[opt=true] is_visible use false to hide it
 function loveterm:setVisible(is_visible)
   is_visible = is_visible or true
@@ -252,7 +269,7 @@ end
 -- `vertical`, and `horizontal` to set the various components of the
 -- rectangle when mode is set to `line`. `options` also has a `fill`
 -- field to set which character is drawn when mode is `fill`.
--- @function loveterm:rectangle
+-- @method
 -- @param mode can either be "fill" or "line"
 -- @int x
 -- @int y
@@ -298,6 +315,7 @@ function loveterm:rectangle(mode, x, y, w, h, options)
 end
 
 --- Adds a line from (x1, y1) to (x2, y2) on the screen.
+--  @method
 --  @int x1
 --  @int y1
 --  @int x2
@@ -373,6 +391,7 @@ end
 -- The options table can include `setfg` (default: false), `setbg` (default: true),
 -- `filter` (default: "linear", other possible setting is "nearest"), or `alpha`
 -- (default: 255), which is the alpha to draw the image with.
+-- @method
 -- @tparam Drawable drawable a love2d drawable object, such as an image or canvas
 -- @tparam[opt={}] table options the options table
 -- @int[opt=0] x the x coordinate of the screen to start drawing on
@@ -426,6 +445,7 @@ end
 --
 -- Can also take two colored text of the form
 -- { fgcolor1, bgcolor1, string1, fgcolor2, ... }
+-- @method
 -- @param s the string or two colored text to be printed
 -- @int[opt=0] x
 -- @int[opt=0] y
@@ -451,6 +471,7 @@ function loveterm:print(s, x, y)
 end
 
 --- Format and print a plaintext string to the screen.
+-- @method
 -- @string s the string to be printed
 -- @int[opt=0] x
 -- @int[opt=0] y
