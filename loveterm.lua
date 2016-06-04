@@ -310,6 +310,21 @@ function loveterm:line(x1, y1, x2, y2, fg, bg, v)
   bg = bg or self.defaultbg
   v = v or 219
 
+  local function plotfn(_, x, y)
+    self:set(v, fg, bg, x, y)
+  end
+
+  loveterm.bresenham(nil, plotfn, x1, y1, x2, y2)
+end
+
+--- Plots a line from (x1, y1) to (x2, y2) on map using a function
+-- @param map passed as the first argument to `plotfn`
+-- @tparam function(map,x,y) plotfn called every time a point is plotted
+-- @int x1
+-- @int y1
+-- @int x2
+-- @int y2
+function loveterm.bresenham(map, plotfn, x1, y1, x2, y2)
   local delta_x = x2 - x1
   local ix = delta_x > 0 and 1 or -1
   delta_x = 2 * math.abs(delta_x)
@@ -318,7 +333,7 @@ function loveterm:line(x1, y1, x2, y2, fg, bg, v)
   local iy = delta_y > 0 and 1 or -1
   delta_y = 2 * math.abs(delta_y)
 
-  self:set(v, fg, bg, x1, y1)
+  plotfn(map, x1, y1)
 
   if delta_x >= delta_y then
     local error = delta_y - delta_x / 2
@@ -332,7 +347,7 @@ function loveterm:line(x1, y1, x2, y2, fg, bg, v)
       error = error + delta_y
       x1 = x1 + ix
 
-      self:set(v, fg, bg, x1, y1)
+      plotfn(map, x1, y1)
     end
   else
     local error = delta_x - delta_y / 2
@@ -346,7 +361,7 @@ function loveterm:line(x1, y1, x2, y2, fg, bg, v)
       error = error + delta_x
       y1 = y1 + iy
 
-      self:set(v, fg, bg, x1, y1)
+      plotfn(map, x1, y1)
     end
   end
 end
