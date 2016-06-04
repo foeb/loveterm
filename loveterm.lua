@@ -260,6 +260,7 @@ end
 -- @int h the height of the rectangle in cells
 -- @tparam table options
 function loveterm:rectangle(mode, x, y, w, h, options)
+  assert(mode == "fill" or mode == "line", "Unknown mode: " .. tostring(mode))
   options = options or {}
   local fg = options.fg or self.defaultfg
   local bg = options.bg or self.defaultbg

@@ -22,6 +22,7 @@ function love.load()
   for i = 0, 255 do
     screen:setValue(i, (i % 16) + 32, math.floor(i / 16) + 5)
   end
+  screen:rectangle("line", 31, 4, 17, 17)
 
   -- ...or draw an image
   local banteng = love.graphics.newImage("extra/Banteng.png")
@@ -37,8 +38,8 @@ function love.load()
   for k, v in pairs(palette) do
     if k ~= "white" and k ~= "lightgray" and k ~= "gray" 
           and k ~= "darkgray" and k ~= "black" then
-      screen:set(codes.smiley, v, screen.defaultbg, i*2 + 26, 22)
-      screen:set(0, palette.black, v, i*2 + 26, 24)
+      screen:set(codes.smiley, v, screen.defaultbg, i*2 + 26, 24)
+      screen:set(0, palette.black, v, i*2 + 26, 26)
       i = i + 1
     end
   end
