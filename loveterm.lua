@@ -160,8 +160,6 @@ local function map(a, fun)
 end
 
 local function blendColors(c1, c2)
-  map(c1, function(x) return x % 255 end)
-  map(c2, function(x) return x % 255 end)
   local alpha = (c2[4] or 255)/255
   local r = math.floor(c1[1] * (1 - alpha) + c2[1] * alpha)
   local g = math.floor(c1[2] * (1 - alpha) + c2[2] * alpha)
