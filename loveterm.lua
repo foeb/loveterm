@@ -152,7 +152,16 @@ function loveterm:setValue(v, x, y)
   self:makeModified()
 end
 
+local function map(a, fun)
+  for i = 1, #a do
+    a[i] = fun(a[i])
+  end
+  return a
+end
+
 local function blendColors(c1, c2)
+  map(c1, function(x) return x % 255 end)
+  map(c2, function(x) return x % 255 end)
   local alpha = (c2[4] or 255)/255
   local r = math.floor(c1[1] * (1 - alpha) + c2[1] * alpha)
   local g = math.floor(c1[2] * (1 - alpha) + c2[2] * alpha)
@@ -225,8 +234,11 @@ end
 --- Empty the screen back to the default background color.
 -- @method
 function loveterm:clear()
-  for i = 0, self.width * self.height - 1 do
-    self:set(0, self.defaultfg, self.defaultbg, i + self.currentLine * self.height)
+  local offset = self.currentLine * self.width
+  for i = offset, self.width * self.height - 1 + offset do
+    self.bg[i] = nil
+    self.fg[i] = nil
+    self.values[i] = nil
   end
 end
 
