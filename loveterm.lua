@@ -51,8 +51,8 @@ end
 -- @string tileset a string of the location of the tileset image
 -- @int width the maximum number of tiles displayed on the x-axis
 -- @int height the maximum number of tiles displayed on the y-axis
--- @tparam Color fg the default foreground color
--- @tparam Color bg the default background color
+-- @tparam[opt=white] Color fg the default foreground color
+-- @tparam[opt=black] Color bg the default background color
 -- @int[opt=16] tilesetWidth the width of the tileset image in tiles
 -- @int[opt=16] tilesetHeight the height of the tileset image in tiles
 -- @return a new loveterm object
@@ -414,15 +414,15 @@ function loveterm:drawImage(drawable, options, x, y, r, sx, sy, ox, oy, kx, ky)
   kx = kx or 0
   ky = ky or 0
   options = options or {}
-  setfg = options.setfg or false
-  setbg = options.setbg or true
-  filter = options.filter or "linear"
-  alpha = options.alpha or 255
+  local setfg = options.setfg or false
+  local setbg = options.setbg or true
+  local filter = options.filter or "linear"
+  local alpha = options.alpha or 255
 
   self.tempCanvas:setFilter(filter, filter)
   love.graphics.setCanvas(self.tempCanvas)
   love.graphics.clear()
-  love.graphics.draw(drawable, x, y, r, sx, sy, ox, oy)
+  love.graphics.draw(drawable, x, y, r, sx, sy, ox, oy, kx, ky)
   love.graphics.setCanvas()
 
   local image = self.tempCanvas:newImageData()
@@ -508,7 +508,7 @@ local function flushRight(text, width)
   for line in iter() do
     line = stripTrailingSpace(line)
 
-    for i = 1, width - line:len() do
+    for _ = 1, width - line:len() do
       acc = acc .. " "
     end
     acc = acc .. line
@@ -537,7 +537,7 @@ local function centerText(text, width)
     line = stripTrailingSpace(line)
 
     local extraspace = width - line:len()
-    for i = 1, math.floor(extraspace/2) do
+    for _ = 1, math.floor(extraspace/2) do
       acc = acc .. " "
     end
     acc = acc .. line
@@ -558,7 +558,7 @@ function loveterm.wrapString(s, width, align)
   local function iter()
     local iter_i = 1
     return function()
-      local result = nil
+      local result
       if iter_i > s:len() then
         return
       elseif s:match("^%w+%-", iter_i) then
