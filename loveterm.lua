@@ -342,7 +342,7 @@ function loveterm:line(x1, y1, x2, y2, fg, bg, v)
     loveterm.set(screen, v, fg, bg, x, y)
   end
 
-  loveterm.bresenham(nil, plotfn, x1, y1, x2, y2)
+  loveterm.bresenham(self, plotfn, x1, y1, x2, y2)
 end
 
 --- Plots a line from (x1, y1) to (x2, y2) on map using a function
