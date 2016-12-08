@@ -171,9 +171,10 @@ end
 --- Set the foreground color at coordinates x, y to be fg.
 -- @method
 -- @tparam Color fg the new foreground color
--- @int x the x coordinate of the cell to be set
+-- @int[opt=0] x the x coordinate of the cell to be set
 -- @int[opt=0] y the y coordinate of the cell to be set
 function loveterm:setfg(fg, x, y)
+  x = x or 0
   y = y or 0
   local index = x + y * self.width
   local oldfg = self.fg[index] or self.defaultfg
@@ -187,6 +188,7 @@ end
 -- @int[opt=0] x the x coordinate of the cell to be set
 -- @int[opt=0] y the y coordinate of the cell to be set
 function loveterm:setbg(bg, x, y)
+  x = x or 0
   y = y or 0
   local index = x + y * self.width
   local oldbg = self.bg[index] or self.defaultbg
@@ -201,6 +203,7 @@ end
 -- @int[opt=0] x the x coordinate of the cell to be set
 -- @int[opt=0] y the y coordinate of the cell to be set
 function loveterm:setColor(fg, bg, x, y)
+  x = x or 0
   y = y or 0
   self:setfg(fg, x, y)
   self:setbg(bg, x, y)
@@ -215,6 +218,7 @@ end
 -- @int[opt=0] x the x coordinate of the cell to be set
 -- @int[opt=0] y the y coordinate of the cell to be set
 function loveterm:set(v, fg, bg, x, y)
+  x = x or 0
   y = y or 0
   self:setValue(v, x, y)
   self:setfg(fg, x, y)
