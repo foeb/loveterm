@@ -266,9 +266,8 @@ end
 --
 -- Not visible objects aren't drawn when called with @{draw}.
 -- @method
--- @bool[opt=true] is_visible use false to hide it
+-- @bool is_visible
 function loveterm:setVisible(is_visible)
-  is_visible = is_visible or true
   self.visible = is_visible
 end
 
